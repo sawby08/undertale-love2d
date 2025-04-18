@@ -1,3 +1,0 @@
-local Ui = {}
-
-return Ui
