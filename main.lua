@@ -2,6 +2,12 @@ local currentScene = nil
 local scenes = {
     battleEngine = require 'source.battleEngine'
 }
+local input = require 'source.utils.input'
+local fps = require 'source.utils.fps'
+
+function love.keypressed(key)
+    input.keypressed(key)
+end
 
 currentScene = scenes.battleEngine
 function love.load()
