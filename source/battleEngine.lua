@@ -1,6 +1,7 @@
 local battleEngine = {}
 local ui = require 'source.battleEngine.ui'
 local input = require 'source.utils.input'
+local text = ''
 
 function battleEngine.load()
     ui.load()
@@ -10,7 +11,7 @@ function battleEngine.update(dt)
     input.update(dt)
 
     ui.update(dt)
-    
+
     input.last()
 end
 

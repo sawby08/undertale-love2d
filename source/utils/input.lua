@@ -1,17 +1,7 @@
 local input = {}
 local pressed = {up, down, left, right, primary, secondary}
 local held = {up, down, left, right, primary, secondary}
-
---[[
-
-to use this properly you have to do an if statement like this:
-
-input.check(INPUT_TYPE, INPUT_NAME)
-if input.check('held', 'up') then
-    -- do stuff when up is held
-end
-
-]]
+-- input.check(inputName, inputType)
 
 local function refresh()
     pressed.up = false
