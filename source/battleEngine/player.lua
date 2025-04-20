@@ -3,10 +3,11 @@ local input = require 'source.utils.input'
 local ui = require 'source.battleEngine.ui'
 
 local sfx = {
-    menumove = love.audio.newSource('sound/menumove.wav', 'static'),
+    menumove = love.audio.newSource('assets/sound/menumove.wav', 'static'),
+    menuselect = love.audio.newSource('assets/sound/menuconfirm.wav', 'static')
 }
 local heart = {
-    image = love.graphics.newImage('images/ut-heart.png'),
+    image = love.graphics.newImage('assets/images/ut-heart.png'),
     x = nil,
     y = nil
 }
@@ -24,6 +25,10 @@ function player.update(dt)
         elseif input.check('left', 'pressed') then
             globals.choice = (globals.choice - 1) % 4
             sfx.menumove:play()
+        end
+        if input.check('primary', 'pressed') then
+            sfx.menuselect:stop()
+            sfx.menuselect:play()
         end
         heart.y = 445
         if globals.choice == 0 then

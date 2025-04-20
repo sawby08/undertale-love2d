@@ -1,10 +1,10 @@
 local Ui = {}
 
 local input = require 'source.utils.input'
-local fightImage = love.graphics.newImage('images/ui/bt/fight.png')
-local actImage = love.graphics.newImage('images/ui/bt/act.png')
-local itemImage = love.graphics.newImage('images/ui/bt/item.png')
-local mercyImage = love.graphics.newImage('images/ui/bt/mercy.png')
+local fightImage = love.graphics.newImage('assets/images/ui/bt/fight.png')
+local actImage = love.graphics.newImage('assets/images/ui/bt/act.png')
+local itemImage = love.graphics.newImage('assets/images/ui/bt/item.png')
+local mercyImage = love.graphics.newImage('assets/images/ui/bt/mercy.png')
 
 local fight = {}
 local act = {}
