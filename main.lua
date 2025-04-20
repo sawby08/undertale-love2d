@@ -9,8 +9,9 @@ function love.keypressed(key)
     input.keypressed(key)
 end
 
-currentScene = scenes.battleEngine
+local currentScene = scenes.battleEngine
 function love.load()
+    love.graphics.setDefaultFilter('nearest', 'nearest')
     currentScene.load()
 end
 
