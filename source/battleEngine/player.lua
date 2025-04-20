@@ -47,7 +47,7 @@ end
 function player.draw()
     love.graphics.setColor(1, 0, 0)
     love.graphics.draw(heart.image, heart.x, heart.y)
-    love.graphics.reset()
+    love.graphics.setColor(1, 1, 1)
 end
 
 

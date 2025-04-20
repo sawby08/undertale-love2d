@@ -11,6 +11,7 @@ end
 
 local currentScene = scenes.battleEngine
 function love.load()
+    love.graphics.setBackgroundColor(0.25, 0.25, 0.25)
     love.graphics.setDefaultFilter('nearest', 'nearest')
     currentScene.load()
 end
