@@ -21,7 +21,7 @@ function battleEngine.update(dt)
     ui.update(dt)
     player.update()
 
-    input.last()
+    input.refresh()
 end
 
 function battleEngine.draw()

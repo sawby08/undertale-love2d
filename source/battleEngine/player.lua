@@ -30,6 +30,7 @@ function player.update(dt)
             sfx.menuselect:stop()
             sfx.menuselect:play()
         end
+
         heart.y = 445
         if globals.choice == 0 then
             heart.x = 35
