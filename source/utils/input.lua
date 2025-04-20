@@ -23,16 +23,16 @@ local function refresh()
 end
 
 function input.keypressed(key)
-    if key == 'up' then
+    if key == 'up' or key == 'w' then
         pressed.up = true
     end
-    if key == 'down' then
+    if key == 'down' or key == 's' then
         pressed.down = true
     end
-    if key == 'left' then
+    if key == 'left' or key == 'a' then
         pressed.left = true
     end
-    if key == 'right' then
+    if key == 'right' or key == 'd' then
         pressed.right = true
     end
     if key == 'z' or key == 'return' then
@@ -44,16 +44,16 @@ function input.keypressed(key)
 end
 
 function input.update(dt)
-    if love.keyboard.isDown('up') then
+    if love.keyboard.isDown('up') or love.keyboard.isDown('w') then
         held.up = true
     end
-    if love.keyboard.isDown('down') then
+    if love.keyboard.isDown('down') or love.keyboard.isDown('s') then
         held.down = true
     end
-    if love.keyboard.isDown('left') then
+    if love.keyboard.isDown('left') or love.keyboard.isDown('a') then
         held.left = true
     end
-    if love.keyboard.isDown('right') then
+    if love.keyboard.isDown('right') or love.keyboard.isDown('d') then
         held.right = true
     end
     if love.keyboard.isDown('z') or love.keyboard.isDown('return') then
@@ -104,8 +104,10 @@ function input.check(inputName, inputType)
         if inputName == 'secondary' then
             return pressed.secondary
         end
+    elseif inputType == 'up' or inputType == 'down' or inputType == 'left' or inputType == 'right' then
+        error('\ninputType is a direction.\nDid you mix the two parameters up?')
     else
-        error('inputType is not "held" nor "pressed"')
+        error('\ninputType is not "held" nor "pressed"\ninputType: ' .. inputType or 'nil')
     end
 end
 
