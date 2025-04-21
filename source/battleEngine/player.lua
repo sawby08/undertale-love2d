@@ -1,17 +1,22 @@
 local player = {}
+
+-- Load libraries
 local input = require 'source.utils.input'
 local ui = require 'source.battleEngine.ui'
 
+-- Load sound effects
 local sfx = {
     menumove = love.audio.newSource('assets/sound/menuMove.ogg', 'static'),
     menuselect = love.audio.newSource('assets/sound/menuSelect.ogg', 'static')
 }
+-- Load heart image and position
 local heart = {
     image = love.graphics.newImage('assets/images/ut-heart.png'),
     x = nil,
     y = nil
 }
 
+-- Load global player stuff
 playerStats = {
     love = 1,
     hp = 20,
@@ -25,6 +30,7 @@ function player.load()
 end
 
 function player.update(dt)
+    -- Menu controls
     if globals.battleState == 'menu' then
         if input.check('right', 'pressed') then
             globals.choice = (globals.choice + 1) % 4
