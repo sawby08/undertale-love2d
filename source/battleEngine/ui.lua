@@ -48,12 +48,12 @@ function Ui.draw()
     love.graphics.draw(itemImage, item[(globals.choice == 2 and 1 or 0) + 1], 343, 432)
     love.graphics.draw(mercyImage, mercy[(globals.choice == 3 and 1 or 0) + 1], 501, 432)
 
-    -- Draw Stats Text
+    -- Draw stats text
     love.graphics.setFont(fonts.mars)
     love.graphics.print(playerStats.name, 30, 400) -- NAME
     love.graphics.print('LV ' .. playerStats.love, 148, 400) -- LV
 
-    -- Draw Box
+    -- Draw box
     love.graphics.push("all")
 
     love.graphics.setColor(0, 0, 0, .5) -- Fill
