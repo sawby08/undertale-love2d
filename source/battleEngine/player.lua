@@ -3,13 +3,20 @@ local input = require 'source.utils.input'
 local ui = require 'source.battleEngine.ui'
 
 local sfx = {
-    menumove = love.audio.newSource('assets/sound/menumove.wav', 'static'),
-    menuselect = love.audio.newSource('assets/sound/menuconfirm.wav', 'static')
+    menumove = love.audio.newSource('assets/sound/menuMove.ogg', 'static'),
+    menuselect = love.audio.newSource('assets/sound/menuSelect.ogg', 'static')
 }
 local heart = {
     image = love.graphics.newImage('assets/images/ut-heart.png'),
     x = nil,
     y = nil
+}
+
+playerStats = {
+    love = 1,
+    hp = 20,
+    maxHp = 20,
+    name = 'Player'
 }
 
 
@@ -45,10 +52,12 @@ function player.update(dt)
 end
 
 function player.draw()
+    love.graphics.push("all")
+
     love.graphics.setColor(1, 0, 0)
     love.graphics.draw(heart.image, heart.x, heart.y)
-    love.graphics.setColor(1, 1, 1)
-end
 
+    love.graphics.pop()
+end
 
 return player
