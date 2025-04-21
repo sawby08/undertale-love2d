@@ -22,4 +22,5 @@ end
 
 function love.draw()
     currentScene.draw()
+    love.graphics.print(love.timer.getFPS())
 end
