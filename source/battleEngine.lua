@@ -32,7 +32,7 @@ function battleEngine.draw()
     love.graphics.push("all")
 
     love.graphics.setColor(1, 1, 1, .5)
-    love.graphics.draw(refs.main)
+    -- love.graphics.draw(refs.main)
 
     love.graphics.pop()
 

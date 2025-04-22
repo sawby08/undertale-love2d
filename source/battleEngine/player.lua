@@ -32,27 +32,58 @@ end
 function player.update(dt)
     -- Menu controls
     if globals.battleState == 'menu' then
-        if input.check('right', 'pressed') then
-            globals.choice = (globals.choice + 1) % 4
-            sfx.menumove:play()
-        elseif input.check('left', 'pressed') then
-            globals.choice = (globals.choice - 1) % 4
-            sfx.menumove:play()
-        end
-        if input.check('primary', 'pressed') then
-            sfx.menuselect:stop()
-            sfx.menuselect:play()
-        end
+        -- Buttons
+        if globals.menuState == 'buttons' then
+            -- Controls
+            if input.check('right', 'pressed') then
+                globals.choice = (globals.choice + 1) % 4
+                sfx.menumove:play()
+            elseif input.check('left', 'pressed') then
+                globals.choice = (globals.choice - 1) % 4
+                sfx.menumove:play()
+            end
+            if input.check('primary', 'pressed') then
+                sfx.menuselect:stop()
+                sfx.menuselect:play()
+                if globals.choice == 0 or globals.choice == 1 then
+                    globals.menuState = 'choose'
+                end
+            end
 
-        heart.y = 445
-        if globals.choice == 0 then
-            heart.x = 35
-        elseif globals.choice == 1 then
-            heart.x = 194
-        elseif globals.choice == 2 then
-            heart.x = 351
-        elseif globals.choice == 3 then
-            heart.x = 508
+            -- Position
+            heart.y = 445
+            if globals.choice == 0 then
+                heart.x = 35
+            elseif globals.choice == 1 then
+                heart.x = 194
+            elseif globals.choice == 2 then
+                heart.x = 351
+            elseif globals.choice == 3 then
+                heart.x = 508
+            end
+        end
+        -- Choose enemy
+        if globals.menuState == 'choose' then
+            -- Position
+            heart.x, heart.y = 53, 279
+
+            -- Controls
+            if input.check('secondary', 'pressed') then
+                globals.menuState = 'buttons'
+
+                -- position the player back to the buttons
+                -- i couldn't find a better way to make it not delayed sorry
+                heart.y = 445
+                if globals.choice == 0 then
+                    heart.x = 35
+                elseif globals.choice == 1 then
+                    heart.x = 194
+                elseif globals.choice == 2 then
+                    heart.x = 351
+                elseif globals.choice == 3 then
+                    heart.x = 508
+                end
+            end
         end
     end
 end

@@ -21,6 +21,9 @@ item[2] = love.graphics.newQuad(110, 0, 110, 42, itemImage)
 mercy[1] = love.graphics.newQuad(0, 0, 110, 42, mercyImage)
 mercy[2] = love.graphics.newQuad(110, 0, 110, 42, mercyImage)
 
+-- Load "HP" graphic
+local hp = love.graphics.newImage('assets/images/ui/spr_hpname_0.png')
+
 -- Load fonts
 local fonts = {
     mars = love.graphics.newFont('assets/fonts/Mars_Needs_Cunnilingus.ttf', 23),
@@ -53,6 +56,20 @@ function Ui.draw()
     love.graphics.print(playerStats.name, 30, 400) -- NAME
     love.graphics.print('LV ' .. playerStats.love, 148, 400) -- LV
 
+    -- Draw "HP" symbol
+    love.graphics.draw(hp, 240, 400)
+
+    -- Draw HP bar
+    love.graphics.setColor(.8, 0, 0)
+    love.graphics.rectangle('fill', 275, 400, playerStats.maxHp * 1.25, 21)
+    love.graphics.setColor(1, 1, 0)
+    love.graphics.rectangle('fill', 275, 400, playerStats.hp * 1.25, 21)
+
+    -- Draw HP numbers
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(fonts.mars)
+    love.graphics.print(playerStats.hp .. ' / ' .. playerStats.maxHp, 289 + playerStats.maxHp*1.25, 400)
+
     -- Draw box
     love.graphics.push("all")
 
@@ -70,6 +87,11 @@ function Ui.draw()
         love.graphics.setColor(1, 1, 1)
         love.graphics.setFont(fonts.determination)
         love.graphics.print('* You encountered the Dummy.', 52, 275)
+    end
+    if globals.menuState == 'choose' then
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.setFont(fonts.determination)
+        love.graphics.print('  * Dummy', 52, 275)
     end
 end
 
