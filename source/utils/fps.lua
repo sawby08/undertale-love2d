@@ -1,5 +1,3 @@
-FPS = 30
-
 local timerSleep = function () return 1/FPS end
 function love.run()
 	if love.math then

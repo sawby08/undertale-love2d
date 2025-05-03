@@ -1,8 +1,5 @@
 local Ui = {}
 
--- Load libraries
-local input = require 'source.utils.input'
-
 -- Load button images & set up quads
 local fightImage = love.graphics.newImage('assets/images/ui/bt/fight.png')
 local actImage = love.graphics.newImage('assets/images/ui/bt/act.png')
@@ -24,15 +21,9 @@ mercy[2] = love.graphics.newQuad(110, 0, 110, 42, mercyImage)
 -- Load "HP" graphic
 local hp = love.graphics.newImage('assets/images/ui/spr_hpname_0.png')
 
--- Load fonts
-local fonts = {
-    mars = love.graphics.newFont('assets/fonts/Mars_Needs_Cunnilingus.ttf', 23),
-    determination = love.graphics.newFont('assets/fonts/determination-mono.ttf', 32)
-}
-
 function Ui.load()
     -- Set box dimensions
-    boxDimensions = {
+    Ui.box = {
         x = 35,
         y = 252,
         width = 570,
@@ -71,23 +62,22 @@ function Ui.draw()
     love.graphics.print(playerStats.hp .. ' / ' .. playerStats.maxHp, 289 + playerStats.maxHp*1.25, 400)
 
     -- Draw box
+    if globals.battleState == 'enemyTurn' then
+        player.lockPosition()
+    end
+    
     love.graphics.push("all")
 
     love.graphics.setColor(0, 0, 0, .5) -- Fill
-    love.graphics.rectangle('fill', boxDimensions.x, boxDimensions.y, boxDimensions.width, boxDimensions.height)
+    love.graphics.rectangle('fill', Ui.box.x, Ui.box.y, Ui.box.width, Ui.box.height)
     love.graphics.setColor(1, 1, 1) -- Line
     love.graphics.setLineWidth(5)
     love.graphics.setLineStyle('rough')
-    love.graphics.rectangle('line', boxDimensions.x, boxDimensions.y, boxDimensions.width, boxDimensions.height)
+    love.graphics.rectangle('line', Ui.box.x, Ui.box.y, Ui.box.width, Ui.box.height)
 
     love.graphics.pop()
 
     -- Draw menu text (PLACEHOLDER)
-    if globals.menuState == 'buttons' then
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.setFont(fonts.determination)
-        love.graphics.print('* You encountered the Dummy.', 52, 275)
-    end
     if globals.menuState == 'choose' then
         love.graphics.setColor(1, 1, 1)
         love.graphics.setFont(fonts.determination)

@@ -1,14 +1,5 @@
 local player = {}
 
--- Load libraries
-local input = require 'source.utils.input'
-local ui = require 'source.battleEngine.ui'
-
--- Load sound effects
-local sfx = {
-    menumove = love.audio.newSource('assets/sound/menuMove.ogg', 'static'),
-    menuselect = love.audio.newSource('assets/sound/menuSelect.ogg', 'static')
-}
 -- Load heart image and position
 local heart = {
     image = love.graphics.newImage('assets/images/ut-heart.png'),
@@ -24,9 +15,24 @@ playerStats = {
     name = 'Player'
 }
 
+function player.lockPosition()
+    if heart.x < ui.box.x+2 then
+        heart.x = ui.box.x+2
+    end
+    if heart.x > ui.box.x+ui.box.width-heart.image:getWidth()-3 then
+        heart.x = ui.box.x+ui.box.width-heart.image:getWidth()-3
+    end
+    if heart.y < ui.box.y+2 then
+        heart.y = ui.box.y+2
+    end
+    if heart.y > ui.box.y+ui.box.height-heart.image:getHeight()-3 then
+        heart.y = ui.box.y+ui.box.height-heart.image:getHeight()-3
+    end
+end
 
 function player.load()
-    
+    heart.x = ui.box.x + ui.box.width / 2 - heart.image:getWidth() / 2
+    heart.y = ui.box.y + ui.box.height / 2 - heart.image:getHeight() / 2
 end
 
 function player.update(dt)
@@ -71,8 +77,7 @@ function player.update(dt)
             if input.check('secondary', 'pressed') then
                 globals.menuState = 'buttons'
 
-                -- position the player back to the buttons
-                -- i couldn't find a better way to make it not delayed sorry
+                -- Position the player heart back to the menu. I couldn't find a better way to do this.
                 heart.y = 445
                 if globals.choice == 0 then
                     heart.x = 35
@@ -85,6 +90,10 @@ function player.update(dt)
                 end
             end
         end
+    elseif globals.battleState == 'enemyTurn' then
+        -- Red soul movement
+        heart.x = heart.x + ((input.check('right', 'held') and 1 or 0) - (input.check('left', 'held') and 1 or 0)) * 4/(input.check('secondary', 'held') and 2 or 1) * dtMultiplier
+        heart.y = heart.y + ((input.check('down', 'held') and 1 or 0) - (input.check('up', 'held') and 1 or 0)) * 4/(input.check('secondary', 'held') and 2 or 1) * dtMultiplier
     end
 end
 

@@ -1,8 +1,5 @@
 local battleEngine = {}
 
-local ui = require 'source.battleEngine.ui'
-local input = require 'source.utils.input'
-local player = require 'source.battleEngine.player'
 local refs = {
     main = love.graphics.newImage("refs/main.png")
 }
@@ -14,6 +11,17 @@ function battleEngine.load()
         choice = 0,
         subchoice = 0
     }
+    sfx = {
+        menumove = love.audio.newSource('assets/sound/menuMove.ogg', 'static'),
+        menuselect = love.audio.newSource('assets/sound/menuSelect.ogg', 'static')
+    }
+    fonts = {
+        mars = love.graphics.newFont('assets/fonts/Mars_Needs_Cunnilingus.ttf', 23),
+        determination = love.graphics.newFont('assets/fonts/determination-mono.ttf', 32)
+    }
+
+    player = require 'source.battleEngine.player'
+    ui = require 'source.battleEngine.ui'
 
     ui.load()
     player.load()
