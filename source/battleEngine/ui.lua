@@ -1,88 +1,81 @@
-local Ui = {}
+local ui = {}
+ui.buttons = {}
 
--- Load button images & set up quads
-local fightImage = love.graphics.newImage('assets/images/ui/bt/fight.png')
-local actImage = love.graphics.newImage('assets/images/ui/bt/act.png')
-local itemImage = love.graphics.newImage('assets/images/ui/bt/item.png')
-local mercyImage = love.graphics.newImage('assets/images/ui/bt/mercy.png')
-local fight = {}
-local act = {}
-local item = {}
-local mercy = {}
-fight[1] = love.graphics.newQuad(0, 0, 110, 42, fightImage)
-fight[2] = love.graphics.newQuad(110, 0, 110, 42, fightImage)
-act[1] = love.graphics.newQuad(0, 0, 110, 42, actImage)
-act[2] = love.graphics.newQuad(110, 0, 110, 42, actImage)
-item[1] = love.graphics.newQuad(0, 0, 110, 42, itemImage)
-item[2] = love.graphics.newQuad(110, 0, 110, 42, itemImage)
-mercy[1] = love.graphics.newQuad(0, 0, 110, 42, mercyImage)
-mercy[2] = love.graphics.newQuad(110, 0, 110, 42, mercyImage)
+function ui.newButton(name, x, y, id)
+    local image = love.graphics.newImage('assets/images/ui/bt/' .. name .. '.png')
+    local button = {}
+    button.image = image
+    button.quads = {}
+    button.quads[1] = love.graphics.newQuad(0, 0, 110, 42, image)
+    button.quads[2] = love.graphics.newQuad(110, 0, 110, 42, image)
+    button.x = x
+    button.y = y
+    button.id = id
+    ui.buttons[id] = button
+end
 
 -- Load "HP" graphic
 local hp = love.graphics.newImage('assets/images/ui/spr_hpname_0.png')
 
-function Ui.load()
+function ui.load()
     -- Set box dimensions
-    Ui.box = {
-        x = 35,
-        y = 252,
+    ui.box = {
+        x = 320,
+        y = 320,
         width = 570,
         height = 135,
+        direction = 0
     }
 end
 
-function Ui.update(dt)
-    
+function ui.update(dt)
+    -- nothing for now
 end
 
-function Ui.draw()
+function ui.draw()
     -- Draw buttons
-    love.graphics.draw(fightImage, fight[(globals.choice == 0 and 1 or 0) + 1], 27, 432)
-    love.graphics.draw(actImage, act[(globals.choice == 1 and 1 or 0) + 1], 185, 432)
-    love.graphics.draw(itemImage, item[(globals.choice == 2 and 1 or 0) + 1], 343, 432)
-    love.graphics.draw(mercyImage, mercy[(globals.choice == 3 and 1 or 0) + 1], 501, 432)
+    for _, button in pairs(ui.buttons) do
+        love.graphics.draw(
+            button.image,
+            button.quads[(battle.choice == button.id) and 2 or 1],
+            button.x,
+            button.y
+        )
+    end
 
     -- Draw stats text
     love.graphics.setFont(fonts.mars)
-    love.graphics.print(playerStats.name, 30, 400) -- NAME
-    love.graphics.print('LV ' .. playerStats.love, 148, 400) -- LV
+    love.graphics.print(player.stats.name, 30, 400) -- NAME
+    love.graphics.print('LV ' .. player.stats.love, 148, 400) -- LV
 
     -- Draw "HP" symbol
     love.graphics.draw(hp, 240, 400)
 
     -- Draw HP bar
     love.graphics.setColor(.8, 0, 0)
-    love.graphics.rectangle('fill', 275, 400, playerStats.maxHp * 1.25, 21)
+    love.graphics.rectangle('fill', 275, 400, player.stats.maxHp * 1.25, 21)
     love.graphics.setColor(1, 1, 0)
-    love.graphics.rectangle('fill', 275, 400, playerStats.hp * 1.25, 21)
+    love.graphics.rectangle('fill', 275, 400, player.stats.hp * 1.25, 21)
 
     -- Draw HP numbers
     love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(fonts.mars)
-    love.graphics.print(playerStats.hp .. ' / ' .. playerStats.maxHp, 289 + playerStats.maxHp*1.25, 400)
+    love.graphics.print(player.stats.hp .. ' / ' .. player.stats.maxHp, 289 + player.stats.maxHp*1.25, 400)
 
     -- Draw box
-    if globals.battleState == 'enemyTurn' then
-        player.lockPosition()
-    end
-    
     love.graphics.push("all")
 
-    love.graphics.setColor(0, 0, 0, .5) -- Fill
-    love.graphics.rectangle('fill', Ui.box.x, Ui.box.y, Ui.box.width, Ui.box.height)
+    love.graphics.translate(ui.box.x, ui.box.y)
+    love.graphics.rotate(ui.box.direction)
+
+    love.graphics.setColor(0, 0, 0, .50) -- Fill
+    love.graphics.rectangle('fill', -ui.box.width/2, -ui.box.height/2, ui.box.width, ui.box.height)
     love.graphics.setColor(1, 1, 1) -- Line
     love.graphics.setLineWidth(5)
     love.graphics.setLineStyle('rough')
-    love.graphics.rectangle('line', Ui.box.x, Ui.box.y, Ui.box.width, Ui.box.height)
+    love.graphics.rectangle('line', -ui.box.width/2, -ui.box.height/2, ui.box.width, ui.box.height)
 
     love.graphics.pop()
-
-    -- Draw menu text (PLACEHOLDER)
-    if globals.menuState == 'choose' then
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.setFont(fonts.determination)
-        love.graphics.print('  * Dummy', 52, 275)
-    end
 end
 
-return Ui
+return ui

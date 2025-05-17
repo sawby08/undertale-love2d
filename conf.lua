@@ -6,4 +6,5 @@ function love.conf(t)
     FPS = 30
 
     t.window.title = "UNDERTALE"
+    t.window.icon = "icon.png"
 end

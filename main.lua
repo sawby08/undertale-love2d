@@ -1,6 +1,6 @@
 local currentScene = nil
 local scenes = {
-    battleEngine = require 'source.battleEngine'
+    battleEngine = require 'source.battleEngineState'
 }
 local defaultFont = love.graphics.newFont(14)
 
@@ -14,7 +14,6 @@ end
 
 local currentScene = scenes.battleEngine
 function love.load()
-    love.graphics.setBackgroundColor(0.125, 0.125, 0.125)
     love.graphics.setDefaultFilter('nearest', 'nearest')
     currentScene.load()
 end
