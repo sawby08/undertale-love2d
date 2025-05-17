@@ -5,6 +5,7 @@ function ui.newButton(name, x, y, id)
     local image = love.graphics.newImage('assets/images/ui/bt/' .. name .. '.png')
     local button = {}
     button.image = image
+    button.name = name
     button.quads = {}
     button.quads[1] = love.graphics.newQuad(0, 0, 110, 42, image)
     button.quads[2] = love.graphics.newQuad(110, 0, 110, 42, image)

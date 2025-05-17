@@ -1,7 +1,8 @@
 local player = {}
+local battleEngine = require 'source.battleEngineState'
 
 -- Load heart image and position
-local heart = {
+player.heart = {
     image = love.graphics.newImage('assets/images/ut-heart.png'),
     x = nil,
     y = nil
@@ -16,8 +17,8 @@ player.stats = {
 }
 
 function player.load()
-    heart.x = ui.box.x + ui.box.width / 2 - heart.image:getWidth() / 2
-    heart.y = ui.box.y + ui.box.height / 2 - heart.image:getHeight() / 2
+    player.heart.x = ui.box.x + ui.box.width / 2 - player.heart.image:getWidth() / 2
+    player.heart.y = ui.box.y + ui.box.height / 2 - player.heart.image:getHeight() / 2
 end
 
 function player.update(dt)
@@ -32,11 +33,15 @@ function player.update(dt)
             elseif input.check('left', 'pressed') then
                 battle.choice = (battle.choice - 1) % (#ui.buttons + 1)
                 sfx.menumove:play()
+            elseif input.check('primary', 'pressed') then
+                writer.stop()
+                battle.state = ui.buttons[battle.choice].name
+                sfx.menuselect:play()
             end
 
             -- Position
-            heart.x = ui.buttons[battle.choice].x + 8
-            heart.y = ui.buttons[battle.choice].y + 13
+            player.heart.x = ui.buttons[battle.choice].x + 8
+            player.heart.y = ui.buttons[battle.choice].y + 13
         end
     end
 end
@@ -45,7 +50,7 @@ function player.draw()
     love.graphics.push("all")
 
     love.graphics.setColor(1, 0, 0)
-    love.graphics.draw(heart.image, heart.x, heart.y)
+    love.graphics.draw(player.heart.image, player.heart.x, player.heart.y)
 
     love.graphics.pop()
 end

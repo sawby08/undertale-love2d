@@ -2,7 +2,6 @@ local currentScene = nil
 local scenes = {
     battleEngine = require 'source.battleEngineState'
 }
-local defaultFont = love.graphics.newFont(14)
 
 fps = require 'source.utils.fps'
 input = require 'source.utils.input'
@@ -20,13 +19,12 @@ end
 
 function love.update(dt)
     currentScene.update(dt)
-    dtMultiplier = dt * 30
 end
 
 function love.draw()
     currentScene.draw()
 
-    love.graphics.setFont(defaultFont)
+    love.graphics.setFont(fonts.default)
     love.graphics.setColor(1, 1, 1)
     love.graphics.print('FPS: ' .. love.timer.getFPS())
 end
