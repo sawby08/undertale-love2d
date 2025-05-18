@@ -24,10 +24,6 @@ local colors = {
     rainbow = true
 }
 
-local function drawText(char, x, y, color)
-    love.graphics.setColor(color)
-    love.graphics.print(char, x, y)
-end
 
 local function parseText(raw)
     local parsed = {}
@@ -159,7 +155,8 @@ function writer:draw()
                 currentColor = colors[c.color] or colors.white
             end
 
-            drawText(c.char, x + shakeX, y + shakeY, currentColor)
+            love.graphics.setColor(currentColor)
+            love.graphics.print(c.char, x + shakeX, y + shakeY)
             x = x + love.graphics.getFont():getWidth(c.char)
             if c.char ~= ' ' then
                 animi = animi + 0.5

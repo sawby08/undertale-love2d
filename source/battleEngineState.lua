@@ -10,6 +10,7 @@ function battleEngine.goToMenu()
 end
 
 function battleEngine.load(encounterName)
+    love.audio.setVolume(1/3)
     battle = {
         turn = 'player',
         state = 'buttons',
@@ -52,6 +53,10 @@ function battleEngine.update(dt)
     input.update(dt)
 
     encounter.update(dt)
+    encounter.bgm:play()
+    encounter.bgm:setVolume(0.5)
+    encounter.bgm:setLooping(true)
+
     ui.update(dt)
     player.update()
     writer:update(dt)
