@@ -6,7 +6,7 @@ local refs = {
 
 function battleEngine.goToMenu()
     battle.state = 'buttons'
-    writer:setParams('[clear]* I hope this works!!', 52, 274, fonts.determination, 1/FPS, sfx.text.uifont)
+    writer:setParams('[clear][rainbow][wave]* It works!', 52, 274, fonts.determination, 1/FPS, sfx.text.uifont)
 end
 
 function battleEngine.load()
@@ -58,7 +58,7 @@ end
 function battleEngine.draw()
     love.graphics.push("all")
 
-    love.graphics.setColor(.25, .25, .25)
+    love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle('fill', 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
     love.graphics.setColor(1, 1, 1, .5)

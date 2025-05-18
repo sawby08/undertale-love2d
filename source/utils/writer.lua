@@ -11,11 +11,6 @@ local doingText = false
 
 writer.isDone = nil
 
-local textSounds = {
-    [1] = sfx.text,
-    [2] = sfx.sans
-}
-
 local colors = {
     white = {1, 1, 1},
     red = {1, 0, 0},
@@ -25,7 +20,8 @@ local colors = {
     yellow = {1, 1, 0},
     weirdRed = {1, .2, .4},
     orange = {1, .4, .2},
-    black = {0, 0, 0}
+    black = {0, 0, 0},
+    rainbow = true
 }
 
 local function drawText(char, x, y, color)
@@ -100,13 +96,20 @@ function writer:update(dt)
     timeSince = timeSince + dt
 
     while timeSince >= timeInterval and index < #parsedText do
-        index = index + 1
-        timeSince = 0
+        local c = parsedText[index + 1]
 
-        local c = parsedText[index]
-        if c and c.char ~= ' ' and c.char ~= '\n' then
-            textSound:stop()
-            textSound:play()
+        if c and (c.char == '' or c.char == nil) then
+            index = index + 1
+        else
+            index = index + 1
+            timeSince = 0
+
+            if c.char ~= ' ' and c.char ~= '\n' then
+                textSound:stop()
+                textSound:play()
+            end
+
+            break
         end
     end
 
@@ -145,7 +148,17 @@ function writer:draw()
             x = startX
             y = y + love.graphics.getFont():getHeight()
         else
-            local currentColor = colors[c.color] or colors.white
+            local currentColor
+            if c.color == "rainbow" then
+                local t = love.timer.getTime() * 2 + i * 0.2
+                local r = 0.5 + 0.5 * math.sin(t)
+                local g = 0.5 + 0.5 * math.sin(t + 2)
+                local b = 0.5 + 0.5 * math.sin(t + 4)
+                currentColor = {r, g, b}
+            else
+                currentColor = colors[c.color] or colors.white
+            end
+
             drawText(c.char, x + shakeX, y + shakeY, currentColor)
             x = x + love.graphics.getFont():getWidth(c.char)
             if c.char ~= ' ' then

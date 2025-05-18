@@ -1,5 +1,4 @@
 local player = {}
-local battleEngine = require 'source.battleEngineState'
 
 -- Load heart image and position
 player.heart = {
