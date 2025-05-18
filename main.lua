@@ -14,7 +14,7 @@ end
 local currentScene = scenes.battleEngine
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
-    currentScene.load()
+    currentScene.load('braden')
 end
 
 function love.update(dt)

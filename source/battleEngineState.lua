@@ -6,10 +6,10 @@ local refs = {
 
 function battleEngine.goToMenu()
     battle.state = 'buttons'
-    writer:setParams('[clear][rainbow][wave]* It works!', 52, 274, fonts.determination, 1/FPS, sfx.text.uifont)
+    writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02, sfx.text.uifont)
 end
 
-function battleEngine.load()
+function battleEngine.load(encounterName)
     battle = {
         turn = 'player',
         state = 'buttons',
@@ -33,6 +33,9 @@ function battleEngine.load()
     player = require 'source.battleEngine.player'
     ui = require 'source.battleEngine.ui'
     writer = require 'source.utils.writer'
+    encounter = require 'encounters/braden'
+
+    encounter.load()
 
     ui.load()
     ui.newButton('fight', 27, 432, 0)
@@ -48,6 +51,7 @@ end
 function battleEngine.update(dt)
     input.update(dt)
 
+    encounter.update(dt)
     ui.update(dt)
     player.update()
     writer:update(dt)
@@ -68,6 +72,8 @@ function battleEngine.draw()
 
     ui.draw()
     writer:draw()
+
+    encounter.draw()
     player.draw()
 end
 

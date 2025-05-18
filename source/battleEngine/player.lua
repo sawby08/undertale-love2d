@@ -12,7 +12,7 @@ player.stats = {
     love = 1,
     hp = 20,
     maxHp = 20,
-    name = 'Player'
+    name = 'Chara'
 }
 
 function player.load()
