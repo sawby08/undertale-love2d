@@ -1,7 +1,7 @@
 local ui = {}
 ui.buttons = {}
 
-function ui.newButton(name, x, y, id)
+function ui.newButton(name, x, y, id, goTo)
     local image = love.graphics.newImage('assets/images/ui/bt/' .. name .. '.png')
     local button = {}
     button.image = image
@@ -12,6 +12,7 @@ function ui.newButton(name, x, y, id)
     button.x = x
     button.y = y
     button.id = id
+    button.goTo = goTo or name
     ui.buttons[id] = button
 end
 
@@ -77,6 +78,17 @@ function ui.draw()
     love.graphics.rectangle('line', -ui.box.width/2, -ui.box.height/2, ui.box.width, ui.box.height)
 
     love.graphics.pop()
+
+    -- Draw text
+    if battle.state == 'choose enemy' then
+        love.graphics.setFont(fonts.determination)
+        for i = 1, 3 do
+            love.graphics.print('  * ' .. encounter.enemies[i].name, 52, 242 + (i * 32))
+            if i > #encounter.enemies-1 then
+                break
+            end
+        end
+    end
 end
 
 return ui

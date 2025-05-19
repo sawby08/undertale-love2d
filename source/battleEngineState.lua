@@ -4,13 +4,17 @@ local refs = {
     main = love.graphics.newImage("refs/main.png")
 }
 
-function battleEngine.goToMenu()
-    battle.state = 'buttons'
-    writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02, sfx.text.uifont)
+function battleEngine.changeState(state)
+    battle.state = state
+
+    if state == 'buttons' then
+        writer:setParams(encounter.text, 52, 274, fonts.determination, 1/(FPS*2), sfx.text.uifont)
+    end
+
+    player.updatePosition()
 end
 
 function battleEngine.load(encounterName)
-    love.audio.setVolume(1/3)
     battle = {
         turn = 'player',
         state = 'buttons',
@@ -39,14 +43,14 @@ function battleEngine.load(encounterName)
     encounter.load()
 
     ui.load()
-    ui.newButton('fight', 27, 432, 0)
-    ui.newButton('act', 185, 432, 1)
+    ui.newButton('fight', 27, 432, 0, 'choose enemy')
+    ui.newButton('act', 185, 432, 1, 'choose enemy')
     ui.newButton('item', 343, 432, 2)
     ui.newButton('mercy', 501, 432, 3)
     
     player.load()
 
-    battleEngine.goToMenu()
+    battleEngine.changeState('buttons')
 end
 
 function battleEngine.update(dt)
@@ -81,6 +85,5 @@ function battleEngine.draw()
     encounter.draw()
     player.draw()
 end
-
 
 return battleEngine
