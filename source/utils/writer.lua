@@ -1,3 +1,42 @@
+--[[
+writer.lua: a module that handles writing text out in a textwriter style in various colors and animations
+
+here's a basic rundown on how to use it:
+1. import the module:
+   local writer = require 'source.utils.writer'
+
+2. set the parameters for the text you want to display:
+    writer:setParams(string, x, y, font, time, sound)
+
+3. call the update function in your main update loop:
+    writer:update(dt)
+
+4. call the draw function in your main draw loop:
+    writer:draw()
+
+tips:
+    1. you can use the following codes in your string:
+        [clear] - resets color and animation to default
+        [break] - breaks the line
+            - you can also use '\n' to break the line
+        [color] - sets the color to one of the predefined colors
+            - white
+            - red
+            - green
+            - blue
+            - cyan
+            - yellow
+            - orange
+            - grey
+            - black
+            - rainbow
+        [wave] - makes the text wave
+        [shake] - makes the text shake
+
+    2. you can use writer.stop() to stop the writer from writing more text and clear it
+    3. you can use writer.isDone to check if the writer is done writing
+]]--
+
 local writer = {}
 
 local text
@@ -18,9 +57,9 @@ local colors = {
     blue = {0, 0, 1},
     cyan = {0, 1, 1},
     yellow = {1, 1, 0},
-    weirdRed = {1, .2, .4},
-    orange = {1, .4, .2},
+    orange = {1, .5, .25},
     black = {0, 0, 0},
+    grey = {0.5, 0.5, 0.5},
     rainbow = true
 }
 
@@ -146,7 +185,7 @@ function writer:draw()
         else
             local currentColor
             if c.color == "rainbow" then
-                local t = love.timer.getTime() * 2 + i * 0.2
+                local t = love.timer.getTime() * 2 + i * 0.1
                 local r = 0.5 + 0.5 * math.sin(t)
                 local g = 0.5 + 0.5 * math.sin(t + 2)
                 local b = 0.5 + 0.5 * math.sin(t + 4)

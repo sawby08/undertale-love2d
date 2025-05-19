@@ -11,7 +11,7 @@ function love.keypressed(key)
     input.keypressed(key)
 end
 
-local currentScene = scenes.battleEngine
+currentScene = scenes.battleEngine
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
     currentScene.load('braden')
@@ -23,8 +23,4 @@ end
 
 function love.draw()
     currentScene.draw()
-
-    love.graphics.setFont(fonts.default)
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print('FPS: ' .. love.timer.getFPS())
 end

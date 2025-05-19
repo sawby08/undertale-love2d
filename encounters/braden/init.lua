@@ -1,9 +1,19 @@
 local encounter = {}
 encounter.enemies = {}
 
+
 function encounter.load()
-    encounter.text = "[clear][rainbow]* i really like how this looks"
+    -- Load encounter stuff
+    encounter.text = "[clear]* You feel like you're going to[break]  have a [wave][grey]mediocre [clear]time."
     encounter.bgm = love.audio.newSource('encounters/braden/sound/mus.ogg', 'stream')
+    encounter.bgm:setVolume(0.5)
+    encounter.bgm:setLooping(true)
+    encounter.startFirst = false
+    encounter.canFlee = true
+
+    encounter.backgroundImage = nil
+
+    -- Load enemies
     encounter.enemies[1] = {
         name = "Braden",
         description = "* A guy out there in the world.",
@@ -22,6 +32,13 @@ function encounter.load()
         yOffset = 0
     }
 
+    -- Load player stats
+    player.stats.love = 1
+    player.stats.maxHp = 20
+    player.stats.hp = player.stats.maxHp
+    player.stats.name = 'Chara'
+
+    -- Report error if too many enemies because i'm too lazy to make it support more than 3
     if #encounter.enemies > 3 then
         error('Too many enemies in encounter. Max is 3, current is ' .. #encounter.enemies)
     end
@@ -32,6 +49,7 @@ function encounter.update(dt)
 end
 
 function encounter.draw()
+    -- draw the enemies
     love.graphics.setColor(1, 1, 1)
     love.graphics.draw(
         encounter.enemies[1].image,
@@ -41,7 +59,7 @@ function encounter.draw()
 end
 
 function encounter.background()
-    
+    if encounter.backgroundImage then love.graphics.draw(encounter.backgroundImage) end
 end
 
 

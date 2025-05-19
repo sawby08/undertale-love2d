@@ -9,13 +9,9 @@ player.heart = {
 }
 
 -- Load global player stuff
-player.stats = {
-    love = 1,
-    hp = 20,
-    maxHp = 20,
-    name = 'Chara'
-}
+player.stats = {}
 
+-- This only exists because I don't know a better way to make the heart not delayed between menu states
 function player.updatePosition()
     if battle.state == 'buttons' then
         player.heart.x = ui.buttons[battle.choice].x + 8
@@ -36,6 +32,7 @@ function player.update(dt)
     if battle.turn == 'player' then
         if battle.state == 'choose enemy' then
             if input.check('secondary', 'pressed') then
+                input.refresh()
                 battleEngine.changeState('buttons')
             end
             if input.check('up', 'pressed') then
