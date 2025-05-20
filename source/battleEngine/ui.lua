@@ -47,8 +47,7 @@ function ui.draw()
 
     -- Draw stats text
     love.graphics.setFont(fonts.mars)
-    love.graphics.print(player.stats.name, 30, 400) -- NAME
-    love.graphics.print('LV ' .. player.stats.love, 148, 400) -- LV
+    love.graphics.print(player.stats.name .. '     LV ' .. player.stats.love, 30, 400)
 
     -- Draw "HP" symbol
     love.graphics.draw(hp, 240, 400)

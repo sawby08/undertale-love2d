@@ -12,6 +12,7 @@ function battleEngine.changeState(state)
         writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02 * (FPS/30), sfx.text.uifont)
     end
 
+
     player.updatePosition()
 end
 

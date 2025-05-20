@@ -1,5 +1,7 @@
 local player = {}
 local battleEngine = require 'source.battleEngineState'
+local xOff, yOff = 0, 0
+local acts = {}
 
 -- Load heart image and position
 player.heart = {
@@ -11,6 +13,18 @@ player.heart = {
 -- Load global player stuff
 player.stats = {}
 
+local function tryMove(newX, newY, requiredActIndex)
+    if xOff ~= newX or yOff ~= newY then
+        if acts[requiredActIndex] then
+            xOff = newX
+            yOff = newY
+            sfx.menumove:stop()
+            sfx.menumove:play()
+        end
+    end
+end
+
+
 -- This only exists because I don't know a better way to make the heart not delayed between menu states
 function player.updatePosition()
     if battle.state == 'buttons' then
@@ -19,9 +33,11 @@ function player.updatePosition()
     elseif battle.state == 'choose enemy' then
         player.heart.x = 55
         player.heart.y = 279 + (battle.subchoice * 32)
+    elseif battle.state == 'act' then
+        player.heart.x = 55 + (xOff * 272)
+        player.heart.y = 279 + (yOff * 32)
     end
 end
-
 
 function player.load()
     player.heart.x = ui.box.x + ui.box.width / 2 - player.heart.image:getWidth() / 2
@@ -31,19 +47,45 @@ end
 function player.update(dt)
     if battle.turn == 'player' then
         if battle.state == 'act' then
+            acts = encounter.enemies[player.chosenEnemy].acts
+            if input.check('left', 'pressed') and xOff ~= 0 then
+                if yOff == 0 then tryMove(0, yOff, 1)
+                elseif yOff == 1 then tryMove(0, yOff, 2)
+                elseif yOff == 2 then tryMove(0, yOff, 4)
+                end
+            end
+            if input.check('right', 'pressed') and xOff ~= 1 then
+                if yOff == 0 then tryMove(1, yOff, 1)
+                elseif yOff == 1 then tryMove(1, yOff, 3)
+                elseif yOff == 2 then tryMove(1, yOff, 5)
+                end
+            end
+            if input.check('up', 'pressed') then
+                if xOff == 0 and yOff == 1 then tryMove(xOff, 0, 1)
+                elseif xOff == 1 and yOff == 1 then tryMove(xOff, 0, 1)
+                elseif xOff == 0 and yOff == 2 then tryMove(xOff, 1, 4)
+                elseif xOff == 1 and yOff == 2 then tryMove(xOff, 1, 3)
+                end
+            end
+            if input.check('down', 'pressed') then
+                if xOff == 0 and yOff == 1 then tryMove(xOff, 2, 4)
+                elseif xOff == 1 and yOff == 1 then tryMove(xOff, 2, 5)
+                elseif xOff == 0 and yOff == 0 then tryMove(xOff, 1, 2)
+                elseif xOff == 1 and yOff == 0 then tryMove(xOff, 1, 3)
+                end
+            end
             if input.check('secondary', 'pressed') then
                 input.refresh()
                 battleEngine.changeState('choose enemy')
                 battle.subchoice = player.chosenEnemy - 1
             end
-        end
-        if battle.state == 'choose enemy' then
+        elseif battle.state == 'choose enemy' then
             if input.check('primary', 'pressed') then
                 if battle.choice == 1 then
                     player.chosenEnemy = battle.subchoice + 1
                     battleEngine.changeState('act')
+                    xOff, yOff = 0, 0
                 end
-                
                 sfx.menuselect:stop()
                 sfx.menuselect:play()
             end
@@ -67,8 +109,6 @@ function player.update(dt)
                     sfx.menumove:play()
                 end
             end
-        player.updatePosition()
-
         elseif battle.state == 'buttons' then
             if input.check('right', 'pressed') then
                 battle.choice = (battle.choice + 1) % (#ui.buttons + 1)
@@ -87,6 +127,7 @@ function player.update(dt)
                 sfx.menuselect:play()
             end
         end
+        player.updatePosition()
     end
 end
 
