@@ -30,7 +30,23 @@ end
 
 function player.update(dt)
     if battle.turn == 'player' then
+        if battle.state == 'act' then
+            if input.check('secondary', 'pressed') then
+                input.refresh()
+                battleEngine.changeState('choose enemy')
+                battle.subchoice = player.chosenEnemy - 1
+            end
+        end
         if battle.state == 'choose enemy' then
+            if input.check('primary', 'pressed') then
+                if battle.choice == 1 then
+                    player.chosenEnemy = battle.subchoice + 1
+                    battleEngine.changeState('act')
+                end
+                
+                sfx.menuselect:stop()
+                sfx.menuselect:play()
+            end
             if input.check('secondary', 'pressed') then
                 input.refresh()
                 battleEngine.changeState('buttons')

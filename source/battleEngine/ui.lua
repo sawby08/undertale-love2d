@@ -89,6 +89,25 @@ function ui.draw()
             end
         end
     end
+    if battle.state == 'act' then
+        love.graphics.setFont(fonts.determination)
+        love.graphics.print('  * Check', 52, 274)
+        if #encounter.enemies[player.chosenEnemy].acts > 0 then
+            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[1], 324, 274)
+        end
+        if #encounter.enemies[player.chosenEnemy].acts > 1 then
+            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[2], 52, 274 + 32)
+        end
+        if #encounter.enemies[player.chosenEnemy].acts > 2 then
+            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[3], 324, 274 + 32)
+        end
+        if #encounter.enemies[player.chosenEnemy].acts > 3 then
+            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[4], 52, 274 + 32 + 32)
+        end
+        if #encounter.enemies[player.chosenEnemy].acts > 4 then
+            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[5], 324, 274 + 32 + 32)
+        end
+    end
 end
 
 return ui

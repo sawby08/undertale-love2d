@@ -14,6 +14,7 @@ end
 currentScene = scenes.battleEngine
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
+    love.audio.setVolume(0)
     currentScene.load('braden')
 end
 

@@ -4,7 +4,8 @@ encounter.enemies = {}
 
 function encounter.load()
     -- Load encounter stuff
-    encounter.text = "[clear]* You feel like you're going to[break]  have a [wave][grey]mediocre [clear]time."
+    encounter.text = "[clear][rainbow]* undertale rainbow tale of[break]  amazingness"
+    -- "[clear]* You feel like you're going to[break]  have a [wave][grey]mediocre [clear]time"
     encounter.bgm = love.audio.newSource('encounters/braden/sound/mus.ogg', 'stream')
     encounter.bgm:setVolume(0.5)
     encounter.bgm:setLooping(true)

@@ -1,7 +1,8 @@
 local battleEngine = {}
 
 local refs = {
-    main = love.graphics.newImage("refs/main.png")
+    main = love.graphics.newImage("refs/main.png"),
+    acts = love.graphics.newImage("refs/acts.png"),
 }
 
 function battleEngine.changeState(state)
@@ -86,7 +87,7 @@ function battleEngine.draw()
     love.graphics.rectangle('fill', 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
     love.graphics.setColor(1, 1, 1, .5)
-    -- love.graphics.draw(refs.main)
+    -- love.graphics.draw(refs.acts, 0, 0, 0, .5)
 
     love.graphics.pop()
 
