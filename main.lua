@@ -23,4 +23,7 @@ end
 
 function love.draw()
     currentScene.draw()
+
+    love.graphics.setFont(fonts.default)
+    love.graphics.print('FPS: ' .. math.floor(1 / love.timer.getDelta()), 5, 5)
 end
