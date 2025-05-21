@@ -18,7 +18,8 @@ local function tryMove(newX, newY, requiredActIndex)
         if acts[requiredActIndex] then
             xOff = newX
             yOff = newY
-            playSfx("menumove")
+            sfx.menumove:stop()
+            sfx.menumove:play()
         end
     end
 end
@@ -85,7 +86,8 @@ function player.update(dt)
                     battleEngine.changeState('act')
                     xOff, yOff = 0, 0
                 end
-                playSfx("menuselect")
+                sfx.menuselect:stop()
+                sfx.menuselect:play()
             end
             if input.check('secondary', 'pressed') then
                 input.refresh()
@@ -95,29 +97,34 @@ function player.update(dt)
                 local last = battle.subchoice
                 battle.subchoice = (battle.subchoice - 1) % (#encounter.enemies)
                 if last ~= battle.subchoice then
-                    playSfx("menumove")
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
                 end
             end
             if input.check('down', 'pressed') then
                 local last = battle.subchoice
                 battle.subchoice = (battle.subchoice + 1) % (#encounter.enemies)
                 if last ~= battle.subchoice then
-                    playSfx("menumove")
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
                 end
             end
         elseif battle.state == 'buttons' then
             if input.check('right', 'pressed') then
                 battle.choice = (battle.choice + 1) % (#ui.buttons + 1)
-                playSfx("menumove")
+                sfx.menumove:stop()
+                sfx.menumove:play()
                 player.updatePosition()
             elseif input.check('left', 'pressed') then
                 battle.choice = (battle.choice - 1) % (#ui.buttons + 1)
-                playSfx("menumove")
+                sfx.menumove:stop()
+                sfx.menumove:play()
                 player.updatePosition()
             elseif input.check('primary', 'pressed') then
                 writer.stop()
                 battleEngine.changeState(ui.buttons[battle.choice].goTo)
-                playSfx("menuselect")
+                sfx.menuselect:stop()
+                sfx.menuselect:play()
             end
         end
         player.updatePosition()

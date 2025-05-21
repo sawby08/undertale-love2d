@@ -145,7 +145,8 @@ function writer:update(dt)
             timeSince = 0
 
             if c.char ~= ' ' and c.char ~= '\n' then
-                playSfx(textSound)
+                textSound:stop()
+                textSound:play()
             end
 
             break

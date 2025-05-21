@@ -5,26 +5,14 @@ local refs = {
     acts = love.graphics.newImage("refs/acts.png"),
 }
 
-function playSfx(name)
-    local parts = {}
-    for part in string.gmatch(name, "[^%.]+") do
-        table.insert(parts, part)
-    end
-    local sound = sfx
-    for _, part in ipairs(parts) do
-        sound = sound and sound[part]
-    end
-    if sound then
-        if sound:isPlaying() then sound:stop() end
-        sound:play()
-    end
-end
-
 function battleEngine.changeState(state)
     battle.state = state
+
     if state == 'buttons' then
-        writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02 * (FPS/30), "text.uifont")
+        writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02 * (FPS/30), sfx.text.uifont)
     end
+
+
     player.updatePosition()
 end
 
