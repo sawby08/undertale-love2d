@@ -4,7 +4,8 @@ encounter.enemies = {}
 
 function encounter.load()
     -- Load encounter stuff
-    encounter.text = "[clear]* You feel like you're going to[breakIndent]have a mediocre time."
+    encounter.text = "[clear][rainbow]* undertale rainbow tale of[break]  amazingness"
+    -- "[clear]* You feel like you're going to[break]  have a [wave][grey]mediocre [clear]time"
     encounter.bgm = love.audio.newSource('encounters/braden/sound/mus.ogg', 'stream')
     encounter.bgm:setVolume(0.5)
     encounter.bgm:setLooping(true)
@@ -15,7 +16,7 @@ function encounter.load()
 
     -- Load enemies
     encounter.enemies[1] = {
-        name = "bradensMG",
+        name = "Braden",
         description = "* A guy out there in the world.",
         acts = {'Talk', 'Crash'},
 
@@ -36,8 +37,7 @@ function encounter.load()
     player.stats.love = 1
     player.stats.maxHp = 20
     player.stats.hp = player.stats.maxHp
-    player.stats.name = ''
-    player.stats.hasKR = false
+    player.stats.name = 'Chara'
 
     -- Report error if too many enemies because i'm too lazy to make it support more than 3
     if #encounter.enemies > 3 then

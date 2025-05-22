@@ -14,6 +14,7 @@ end
 currentScene = scenes.battleEngine
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
+    love.audio.setVolume(0)
     currentScene.load('braden')
 end
 
@@ -23,7 +24,4 @@ end
 
 function love.draw()
     currentScene.draw()
-
-    love.graphics.setFont(fonts.default)
-    love.graphics.print('FPS: ' .. math.floor(1 / love.timer.getDelta()), 5, 5)
 end

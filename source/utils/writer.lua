@@ -87,11 +87,6 @@ local function parseText(raw)
                     currentColor = code
                 elseif code == "wave" or code == "shake" then
                     currentAnim = code
-                elseif code == "breakIndent" then
-                    table.insert(parsed, {char = "\n", color = currentColor, animation = currentAnim})
-                    table.insert(parsed, {char = "  ", color = currentColor, animation = currentAnim})
-                else
-                    -- Ignore unknown codes
                 end
 
                 i = close + 1
