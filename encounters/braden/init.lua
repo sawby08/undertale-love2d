@@ -34,8 +34,8 @@ function encounter.load()
     }
 
     -- Load player stats
-    player.stats.love = 1
-    player.stats.maxHp = 20
+    player.stats.love = 8
+    player.stats.maxHp = 16 + (player.stats.love * 4)
     player.stats.hp = player.stats.maxHp
     player.stats.name = 'Chara'
 

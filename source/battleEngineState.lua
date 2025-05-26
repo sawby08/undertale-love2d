@@ -11,6 +11,11 @@ function battleEngine.changeState(state)
     if state == 'buttons' then
         writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02 * (FPS/30), sfx.text.uifont)
     end
+    if state == 'attack' then
+        ui.box.width = 135
+        player.heart.x = ui.box.x + ui.box.width/200 - 8
+        player.heart.y = ui.box.y + ui.box.height/200 - 8
+    end
 
     player.updatePosition()
 end
@@ -60,9 +65,12 @@ function battleEngine.load(encounterName)
     -- Go to menu or enemy turn
     if encounter.startFirst then
         battle.turn = 'enemies'
-        battleEngine.changeState('dialogue')
+        battleEngine.changeState('attack')
+        battle.choice = -1
     else
+        battle.turn = 'player'
         battleEngine.changeState('buttons')
+        battle.choice = 0
     end
 end
 
