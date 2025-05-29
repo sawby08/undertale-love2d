@@ -110,9 +110,9 @@ function player.update(dt)
             xvel, yvel = 0, 0
             local speed = 4
             if input.check('secondary', 'held') then
-                speed = 2
+                speed = 2 * dtMultiplier
             else
-                speed = 4
+                speed = 4 * dtMultiplier
             end
             if input.check('up', 'held') then
                 yvel = yvel - speed

@@ -12,7 +12,7 @@ function battleEngine.changeState(state)
         writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02 * (FPS/30), sfx.text.uifont)
     end
     if state == 'attack' then
-        ui.box.width = 135
+       --  ui.box.width = 135
         player.heart.x = ui.box.x + ui.box.width/200 - 8
         player.heart.y = ui.box.y + ui.box.height/200 - 8
     end

@@ -9,7 +9,7 @@ function encounter.load()
     encounter.bgm = love.audio.newSource('encounters/braden/sound/mus.ogg', 'stream')
     encounter.bgm:setVolume(0.5)
     encounter.bgm:setLooping(true)
-    encounter.startFirst = false
+    encounter.startFirst = true
     encounter.canFlee = true
 
     encounter.backgroundImage = nil

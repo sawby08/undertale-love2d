@@ -21,6 +21,7 @@ end
 
 function love.update(dt)
     currentScene.update(dt)
+    dtMultiplier = dt * 30
 end
 
 function love.draw()
