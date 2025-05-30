@@ -1,6 +1,9 @@
 local player = {}
 local battleEngine = require 'source.battleEngineState'
 local xvel, yvel = 0, 0
+local blueGrav = 0
+local jumpstage = 0
+local jumptimer = 0
 
 -- Load heart image and position
 player.heart = {
@@ -13,14 +16,24 @@ player.heart = {
 player.stats = {}
 
 -- This only exists because I don't know a better way to make the heart not delayed between menu states
-function player.updatePosition(x, y)
+function player.updatePosition()
     if battle.turn == 'player' then
+        if battle.state == 'fight' then
+            player.heart.x = -16
+            player.heart.y = -16
+        end
         if battle.state == 'buttons' then
             player.heart.x = ui.buttons[battle.choice].x + 8
             player.heart.y = ui.buttons[battle.choice].y + 13
         elseif battle.state == 'choose enemy' then
             player.heart.x = 55
             player.heart.y = 279 + (battle.subchoice * 32)
+        elseif battle.state == 'item' then
+            player.heart.x = 64
+            player.heart.y = 278
+        elseif battle.state == 'mercy' then
+            player.heart.x = 55
+            player.heart.y = 279
         end
     end
     if battle.turn == 'enemies' then
@@ -28,28 +41,38 @@ function player.updatePosition(x, y)
             player.heart.x = player.heart.x + xvel
             player.heart.y = player.heart.y + yvel
         end
-        if player.heart.x < ui.box.x - ui.box.width/2 + 3 then
-            player.heart.x = ui.box.x - ui.box.width/2 + 3
+        if player.heart.x < ui.box.x + 2 then
+            player.heart.x = ui.box.x + 2
         end
-        if player.heart.x > ui.box.x + ui.box.width/2 - 18 then
-            player.heart.x = ui.box.x + ui.box.width/2 - 18
+        if player.heart.x > ui.box.x + ui.box.width - 19 then
+            player.heart.x = ui.box.x + ui.box.width - 19
         end
-        if player.heart.y < ui.box.y - ui.box.height/2 + 3 then
-            player.heart.y = ui.box.y - ui.box.height/2 + 3
+        if player.heart.y < ui.box.y + 2 then
+            player.heart.y = ui.box.y + 2
         end
-        if player.heart.y > ui.box.y + ui.box.height/2 - 18 then
-            player.heart.y = ui.box.y + ui.box.height/2 - 18
+        if player.heart.y > ui.box.y + ui.box.height - 19 then
+            player.heart.y = ui.box.y + ui.box.height - 19
         end
     end
 end
 
 function player.load()
-    player.mode = 'red'
+    player.mode = 1
 end
 
 function player.update(dt)
     if battle.turn == 'player' then
-        if battle.state == 'act' then
+        if battle.state == 'mercy' then
+            if input.check('secondary', 'pressed') then
+                input.refresh()
+                battleEngine.changeState('buttons')
+            end
+        elseif battle.state == 'item' then
+            if input.check('secondary', 'pressed') then
+                input.refresh()
+                battleEngine.changeState('buttons')
+            end
+        elseif battle.state == 'act' then
             if input.check('secondary', 'pressed') then
                 input.refresh()
                 battleEngine.changeState('choose enemy')
@@ -57,7 +80,9 @@ function player.update(dt)
             end
         elseif battle.state == 'choose enemy' then
             if input.check('primary', 'pressed') then
-                if battle.choice == 1 then
+                if battle.choice == 0 then
+                    battleEngine.changeState('fight')
+                elseif battle.choice == 1 then
                     player.chosenEnemy = battle.subchoice + 1
                     battleEngine.changeState('act')
                 end
@@ -114,17 +139,47 @@ function player.update(dt)
             else
                 speed = 4 * dtMultiplier
             end
-            if input.check('up', 'held') then
-                yvel = yvel - speed
-            end
-            if input.check('down', 'held') then
-                yvel = yvel + speed
-            end
-            if input.check('left', 'held') then
-                xvel = xvel - speed
-            end
-            if input.check('right', 'held') then
-                xvel = xvel + speed
+            if player.mode == 1 then
+                if input.check('up', 'held') then
+                    yvel = yvel - speed
+                end
+                if input.check('down', 'held') then
+                    yvel = yvel + speed
+                end
+                if input.check('left', 'held') then
+                    xvel = xvel - speed
+                end
+                if input.check('right', 'held') then
+                    xvel = xvel + speed
+                end
+            elseif player.mode == 2 then
+                blueGrav = blueGrav + (0.75 * dtMultiplier)
+                yvel = yvel + blueGrav
+                if input.check('left', 'held') then
+                    xvel = xvel - speed
+                end
+                if input.check('right', 'held') then
+                    xvel = xvel + speed
+                end
+                if player.heart.y >= ui.box.y + ui.box.height - 19 then
+                    jumpstage = 0
+                    jumptimer = 0
+                    if input.check('up', 'held') then
+                        jumpstage = 1
+                    end
+                end
+                if jumpstage == 1 and input.check('up', 'held') and player.heart.y <= ui.box.y + ui.box.height - 19 then
+                    blueGrav = -6 * dtMultiplier
+                    jumptimer = jumptimer + love.timer.getDelta()
+                end
+                if player.heart.y <= ui.box.y + ui.box.height - 19 and jumpstage == 1 and not input.check('up', 'held') then
+                    blueGrav = -1.5
+                    jumpstage = 2
+                end
+                if jumptimer > 0.4 then
+                    jumptimer = 0
+                    jumpstage = 2
+                end
             end
         end
         player.updatePosition()
@@ -135,7 +190,11 @@ end
 function player.draw()
     love.graphics.push("all")
 
-    love.graphics.setColor(1, 0, 0)
+    if player.mode == 1 then
+        love.graphics.setColor(1, 0, 0)
+    elseif player.mode == 2 then
+        love.graphics.setColor(0, 0, 1)
+    end
     love.graphics.draw(player.heart.image, player.heart.x, player.heart.y)
 
     love.graphics.pop()

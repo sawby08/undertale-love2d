@@ -22,8 +22,8 @@ local hp = love.graphics.newImage('assets/images/ui/spr_hpname_0.png')
 function ui.load()
     -- Set box dimensions
     ui.box = {
-        x = 320,
-        y = 320,
+        x = 35,
+        y = 253,
         width = 570,
         height = 135,
         direction = 0
@@ -47,7 +47,7 @@ function ui.draw()
 
     -- Draw stats text
     love.graphics.setFont(fonts.mars)
-    love.graphics.print(player.stats.name, 30, 400) -- NAME
+    love.graphics.print(player.stats.name or 'chara', 30, 400) -- NAME
     love.graphics.print('LV ' .. player.stats.love, 148, 400) -- LV
 
     -- Draw "HP" symbol
@@ -71,11 +71,11 @@ function ui.draw()
     love.graphics.rotate(ui.box.direction)
 
     love.graphics.setColor(0, 0, 0, .50) -- Fill
-    love.graphics.rectangle('fill', -ui.box.width/2, -ui.box.height/2, ui.box.width, ui.box.height)
+    love.graphics.rectangle('fill', 0, 0, ui.box.width, ui.box.height)
     love.graphics.setColor(1, 1, 1) -- Line
     love.graphics.setLineWidth(5)
     love.graphics.setLineStyle('rough')
-    love.graphics.rectangle('line', -ui.box.width/2, -ui.box.height/2, ui.box.width, ui.box.height)
+    love.graphics.rectangle('line', 0, 0, ui.box.width, ui.box.height)
 
     love.graphics.pop()
 
@@ -88,8 +88,7 @@ function ui.draw()
                 break
             end
         end
-    end
-    if battle.state == 'act' then
+    elseif battle.state == 'act' then
         love.graphics.setFont(fonts.determination)
         love.graphics.print('  * Check', 52, 274)
         if #encounter.enemies[player.chosenEnemy].acts > 0 then
@@ -107,6 +106,17 @@ function ui.draw()
         if #encounter.enemies[player.chosenEnemy].acts > 4 then
             love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[5], 324, 274 + 32 + 32)
         end
+    elseif battle.state == 'item' then
+        love.graphics.setFont(fonts.determination)
+        love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[1], 'seriousName'), 68, 274)
+        love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[2], 'seriousName'), 308, 274)
+        love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[3], 'seriousName'), 68, 306)
+        love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[4], 'seriousName'), 308, 306)
+        love.graphics.print('     PAGE 1', 308, 338)
+    elseif battle.state == 'mercy' then
+        love.graphics.setFont(fonts.determination)
+        love.graphics.print('  * Spare', 52, 274)
+        love.graphics.print('  * Flee', 52, 306)
     end
 end
 

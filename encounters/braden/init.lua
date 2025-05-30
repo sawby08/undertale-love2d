@@ -9,7 +9,7 @@ function encounter.load()
     encounter.bgm = love.audio.newSource('encounters/braden/sound/mus.ogg', 'stream')
     encounter.bgm:setVolume(0.5)
     encounter.bgm:setLooping(true)
-    encounter.startFirst = true
+    encounter.startFirst = false
     encounter.canFlee = true
 
     encounter.backgroundImage = nil
@@ -37,8 +37,8 @@ function encounter.load()
     player.stats.love = 8
     player.stats.maxHp = 16 + (player.stats.love * 4)
     player.stats.hp = player.stats.maxHp
-    player.stats.name = 'Chara'
-
+    player.stats.name = nil
+    player.inventory = {11, 1, 1, 23, 17, 19, 19, 10}
     -- Report error if too many enemies because i'm too lazy to make it support more than 3
     if #encounter.enemies > 3 then
         error('Too many enemies in encounter. Max is 3, current is ' .. #encounter.enemies)

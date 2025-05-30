@@ -3,6 +3,7 @@ local battleEngine = {}
 local refs = {
     main = love.graphics.newImage("refs/main.png"),
     acts = love.graphics.newImage("refs/acts.png"),
+    items = love.graphics.newImage("refs/items.png"),
 }
 
 function battleEngine.changeState(state)
@@ -10,11 +11,14 @@ function battleEngine.changeState(state)
 
     if state == 'buttons' then
         writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02 * (FPS/30), sfx.text.uifont)
-    end
-    if state == 'attack' then
+    elseif state == 'attack' then
        --  ui.box.width = 135
-        player.heart.x = ui.box.x + ui.box.width/200 - 8
-        player.heart.y = ui.box.y + ui.box.height/200 - 8
+        player.heart.x = ui.box.x + ui.box.width / 2 - 8
+        player.heart.y = ui.box.y + ui.box.height / 2 - 8
+        ui.box.x = 252
+        ui.box.width = 135
+    elseif state == 'fight' then
+        battle.choice = -1
     end
 
     player.updatePosition()
@@ -50,6 +54,7 @@ function battleEngine.load(encounterName)
     ui = require 'source.battleEngine.ui'
     writer = require 'source.utils.writer'
     encounter = require('encounters/' .. encounterName)
+    itemManager = require 'source.utils.itemManager'
 
     -- Load objects
     encounter.load()
@@ -95,7 +100,7 @@ function battleEngine.draw()
     love.graphics.rectangle('fill', 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
     love.graphics.setColor(1, 1, 1, .5)
-    -- love.graphics.draw(refs.acts, 0, 0, 0, .5)
+    -- love.graphics.draw(refs.main, 0, 0, 0)
 
     love.graphics.pop()
 
