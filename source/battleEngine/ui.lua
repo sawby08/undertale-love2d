@@ -16,8 +16,9 @@ function ui.newButton(name, x, y, id, goTo)
     ui.buttons[id] = button
 end
 
--- Load "HP" graphic
+-- Load "HP" and "KR" graphics
 local hp = love.graphics.newImage('assets/images/ui/spr_hpname_0.png')
+local kr = love.graphics.newImage('assets/images/ui/spr_krmeter_0.png')
 
 function ui.load()
     -- Set box dimensions
@@ -50,8 +51,15 @@ function ui.draw()
     love.graphics.print(player.stats.name or 'chara', 30, 400) -- NAME
     love.graphics.print('LV ' .. player.stats.love, 148, 400) -- LV
 
-    -- Draw "HP" symbol
+    -- Draw "HP" and "KR" symbols
+    love.graphics.setColor(1, 1, 1)
     love.graphics.draw(hp, 240, 400)
+    if player.hasKR then
+        if player.kr > 0 then
+            -- purple color (i haven't gotten to that part yet)
+        end
+        love.graphics.draw(kr, 395, 405)
+    end
 
     -- Draw HP bar
     love.graphics.setColor(.8, 0, 0)
@@ -60,9 +68,19 @@ function ui.draw()
     love.graphics.rectangle('fill', 275, 400, player.stats.hp * 1.25, 21)
 
     -- Draw HP numbers
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.setFont(fonts.mars)
-    love.graphics.print(player.stats.hp .. ' / ' .. player.stats.maxHp, 289 + player.stats.maxHp*1.25, 400)
+    if player.hasKR then
+        if player.kr == 0 then
+            love.graphics.setColor(1, 1, 1)
+        else
+            -- purple color (i haven't gotten to that part yet)
+        end
+        love.graphics.setFont(fonts.mars)
+        love.graphics.print(player.stats.hp .. ' / ' .. player.stats.maxHp, 320 + player.stats.maxHp*1.25, 400)
+    else
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.setFont(fonts.mars)
+        love.graphics.print(player.stats.hp .. ' / ' .. player.stats.maxHp, 289 + player.stats.maxHp*1.25, 400)
+    end
 
     -- Draw box
     love.graphics.push("all")
@@ -116,7 +134,9 @@ function ui.draw()
     elseif battle.state == 'mercy' then
         love.graphics.setFont(fonts.determination)
         love.graphics.print('  * Spare', 52, 274)
-        love.graphics.print('  * Flee', 52, 306)
+        if encounter.canFlee then
+            love.graphics.print('  * Flee', 52, 306)
+        end
     end
 end
 

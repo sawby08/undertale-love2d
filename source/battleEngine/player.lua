@@ -21,11 +21,13 @@ function player.updatePosition()
         if battle.state == 'fight' then
             player.heart.x = -16
             player.heart.y = -16
-        end
-        if battle.state == 'buttons' then
+        elseif battle.state == 'buttons' then
             player.heart.x = ui.buttons[battle.choice].x + 8
             player.heart.y = ui.buttons[battle.choice].y + 13
         elseif battle.state == 'choose enemy' then
+            player.heart.x = 55
+            player.heart.y = 279 + (battle.subchoice * 32)
+        elseif battle.state == 'act' then
             player.heart.x = 55
             player.heart.y = 279 + (battle.subchoice * 32)
         elseif battle.state == 'item' then
@@ -33,7 +35,7 @@ function player.updatePosition()
             player.heart.y = 278
         elseif battle.state == 'mercy' then
             player.heart.x = 55
-            player.heart.y = 279
+            player.heart.y = 279 + (battle.subchoice * 32)
         end
     end
     if battle.turn == 'enemies' then
@@ -57,7 +59,7 @@ function player.updatePosition()
 end
 
 function player.load()
-    player.mode = 1
+    player.mode = 2
 end
 
 function player.update(dt)
@@ -66,6 +68,22 @@ function player.update(dt)
             if input.check('secondary', 'pressed') then
                 input.refresh()
                 battleEngine.changeState('buttons')
+            end
+            if input.check('down', 'pressed') and encounter.canFlee then
+                if encounter.canFlee and battle.subchoice == 0 then
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
+                end
+                battle.subchoice = 1
+                player.updatePosition()
+            end
+            if input.check('up', 'pressed') then
+                if battle.subchoice == 1 then
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
+                end
+                battle.subchoice = 0
+                player.updatePosition()
             end
         elseif battle.state == 'item' then
             if input.check('secondary', 'pressed') then
@@ -125,6 +143,7 @@ function player.update(dt)
                 player.updatePosition()
             elseif input.check('primary', 'pressed') then
                 writer.stop()
+                battle.subchoice = 0
                 battleEngine.changeState(ui.buttons[battle.choice].goTo)
                 sfx.menuselect:stop()
                 sfx.menuselect:play()
@@ -153,6 +172,7 @@ function player.update(dt)
                     xvel = xvel + speed
                 end
             elseif player.mode == 2 then
+                -- Left and right movement and gravitational pull
                 blueGrav = blueGrav + (0.75 * dtMultiplier)
                 yvel = yvel + blueGrav
                 if input.check('left', 'held') then
@@ -161,22 +181,28 @@ function player.update(dt)
                 if input.check('right', 'held') then
                     xvel = xvel + speed
                 end
+
+                -- Check if player is on the bottom of the box so they can jump, resets the timer and jumpstage
                 if player.heart.y >= ui.box.y + ui.box.height - 19 then
                     jumpstage = 0
                     jumptimer = 0
                     if input.check('up', 'held') then
+                        -- Change jumpstage so the player stays jumping
                         jumpstage = 1
                     end
                 end
                 if jumpstage == 1 and input.check('up', 'held') and player.heart.y <= ui.box.y + ui.box.height - 19 then
+                    -- Make the player jump by 6 pixels and increase jumptimer to prevent the player from jumping too high
                     blueGrav = -6 * dtMultiplier
                     jumptimer = jumptimer + love.timer.getDelta()
                 end
                 if player.heart.y <= ui.box.y + ui.box.height - 19 and jumpstage == 1 and not input.check('up', 'held') then
+                    -- Change gravity so movement is tighter
                     blueGrav = -1.5
                     jumpstage = 2
                 end
                 if jumptimer > 0.4 then
+                    -- Don't change gravity so the full motion is fluid
                     jumptimer = 0
                     jumpstage = 2
                 end

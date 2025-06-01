@@ -5,12 +5,12 @@ encounter.enemies = {}
 function encounter.load()
     -- Load encounter stuff
     encounter.text = "[clear][rainbow]* undertale rainbow tale of[break]  amazingness"
-    -- "[clear]* You feel like you're going to[break]  have a [wave][grey]mediocre [clear]time"
+    encounter.startFirst = false
+    encounter.canFlee = true
+    
     encounter.bgm = love.audio.newSource('encounters/braden/sound/mus.ogg', 'stream')
     encounter.bgm:setVolume(0.5)
     encounter.bgm:setLooping(true)
-    encounter.startFirst = false
-    encounter.canFlee = true
 
     encounter.backgroundImage = nil
 
@@ -18,7 +18,7 @@ function encounter.load()
     encounter.enemies[1] = {
         name = "Braden",
         description = "* A guy out there in the world.",
-        acts = {'Talk', 'Crash'},
+        acts = {'Crash', 'Talk'},
 
         hp = 100,
         maxHp = 100,
@@ -33,12 +33,18 @@ function encounter.load()
         yOffset = 0
     }
 
-    -- Load player stats
-    player.stats.love = 8
-    player.stats.maxHp = 16 + (player.stats.love * 4)
-    player.stats.hp = player.stats.maxHp
+    -- Load player stats (in the encounter file so player info is encounter specific)
+    player.stats.love = 19
     player.stats.name = nil
     player.inventory = {11, 1, 1, 23, 17, 19, 19, 10}
+    player.hasKR = true
+
+    -- Don't edit these unless you know what you're doing
+    player.stats.maxHp = 16 + (player.stats.love * 4)
+    player.stats.hp = player.stats.maxHp
+    player.kr = 0
+
+
     -- Report error if too many enemies because i'm too lazy to make it support more than 3
     if #encounter.enemies > 3 then
         error('Too many enemies in encounter. Max is 3, current is ' .. #encounter.enemies)
