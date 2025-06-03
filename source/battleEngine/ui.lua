@@ -16,6 +16,13 @@ function ui.newButton(name, x, y, id, goTo)
     ui.buttons[id] = button
 end
 
+function ui.newBoxParams(x, y, w, h)
+    ui.box.x = x
+    ui.box.y = y
+    ui.box.w = w
+    ui.box.h = h
+end
+
 -- Load "HP" and "KR" graphics
 local hp = love.graphics.newImage('assets/images/ui/spr_hpname_0.png')
 local kr = love.graphics.newImage('assets/images/ui/spr_krmeter_0.png')
@@ -56,7 +63,7 @@ function ui.draw()
     love.graphics.draw(hp, 240, 400)
     if player.hasKR then
         if player.kr > 0 then
-            -- purple color (i haven't gotten to that part yet)
+            -- Purple color (I haven't gotten to that part yet)
         end
         love.graphics.draw(kr, 395, 405)
     end
@@ -72,7 +79,7 @@ function ui.draw()
         if player.kr == 0 then
             love.graphics.setColor(1, 1, 1)
         else
-            -- purple color (i haven't gotten to that part yet)
+            -- Purple color (I haven't gotten to that part yet)
         end
         love.graphics.setFont(fonts.mars)
         love.graphics.print(player.stats.hp .. ' / ' .. player.stats.maxHp, 320 + player.stats.maxHp*1.25, 400)
@@ -98,41 +105,43 @@ function ui.draw()
     love.graphics.pop()
 
     -- Draw text
+    love.graphics.setFont(fonts.determination)
     if battle.state == 'choose enemy' then
-        love.graphics.setFont(fonts.determination)
-        for i = 1, 3 do
+        for i = 1, #encounter.enemies do
+            local string = '  * ' .. encounter.enemies[i].name
+            love.graphics.setColor(1, 1, 1)
             love.graphics.print('  * ' .. encounter.enemies[i].name, 52, 242 + (i * 32))
-            if i > #encounter.enemies-1 then
-                break
-            end
+
+            love.graphics.setColor(1/3, 1/3, 1/3)
+            love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), 100, 20)
+
+            love.graphics.setColor(0, 0.75, 0)
+            love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), ((encounter.enemies[i].hp / encounter.enemies[i].maxHp) * 100), 20)
         end
     elseif battle.state == 'act' then
-        love.graphics.setFont(fonts.determination)
         love.graphics.print('  * Check', 52, 274)
         if #encounter.enemies[player.chosenEnemy].acts > 0 then
             love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[1], 324, 274)
         end
         if #encounter.enemies[player.chosenEnemy].acts > 1 then
-            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[2], 52, 274 + 32)
+            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[2], 52, 306)
         end
         if #encounter.enemies[player.chosenEnemy].acts > 2 then
-            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[3], 324, 274 + 32)
+            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[3], 324, 306)
         end
         if #encounter.enemies[player.chosenEnemy].acts > 3 then
-            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[4], 52, 274 + 32 + 32)
+            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[4], 52, 338)
         end
         if #encounter.enemies[player.chosenEnemy].acts > 4 then
-            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[5], 324, 274 + 32 + 32)
+            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[5], 324, 338)
         end
     elseif battle.state == 'item' then
-        love.graphics.setFont(fonts.determination)
         love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[1], 'seriousName'), 68, 274)
         love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[2], 'seriousName'), 308, 274)
         love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[3], 'seriousName'), 68, 306)
         love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[4], 'seriousName'), 308, 306)
         love.graphics.print('     PAGE 1', 308, 338)
     elseif battle.state == 'mercy' then
-        love.graphics.setFont(fonts.determination)
         love.graphics.print('  * Spare', 52, 274)
         if encounter.canFlee then
             love.graphics.print('  * Flee', 52, 306)

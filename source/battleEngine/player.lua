@@ -24,18 +24,32 @@ function player.updatePosition()
         elseif battle.state == 'buttons' then
             player.heart.x = ui.buttons[battle.choice].x + 8
             player.heart.y = ui.buttons[battle.choice].y + 13
-        elseif battle.state == 'choose enemy' then
+        elseif battle.state == 'choose enemy' or battle.state == 'mercy' then
             player.heart.x = 55
             player.heart.y = 279 + (battle.subchoice * 32)
         elseif battle.state == 'act' then
-            player.heart.x = 55
-            player.heart.y = 279 + (battle.subchoice * 32)
+            if battle.subchoice == 0 then
+                player.heart.x = 55
+                player.heart.y = 279
+            elseif battle.subchoice == 1 then
+                player.heart.x = 327
+                player.heart.y = 279
+            elseif battle.subchoice == 2 then
+                player.heart.x = 55
+                player.heart.y = 311
+            elseif battle.subchoice == 3 then
+                player.heart.x = 327
+                player.heart.y = 311
+            elseif battle.subchoice == 4 then
+                player.heart.x = 55
+                player.heart.y = 343
+            elseif battle.subchoice == 5 then
+                player.heart.x = 327
+                player.heart.y = 343
+            end
         elseif battle.state == 'item' then
             player.heart.x = 64
             player.heart.y = 278
-        elseif battle.state == 'mercy' then
-            player.heart.x = 55
-            player.heart.y = 279 + (battle.subchoice * 32)
         end
     end
     if battle.turn == 'enemies' then
@@ -67,7 +81,7 @@ function player.update(dt)
         if battle.state == 'mercy' then
             if input.check('secondary', 'pressed') then
                 input.refresh()
-                battleEngine.changeState('buttons')
+                changeBattleState('buttons')
             end
             if input.check('down', 'pressed') and encounter.canFlee then
                 if encounter.canFlee and battle.subchoice == 0 then
@@ -88,33 +102,18 @@ function player.update(dt)
         elseif battle.state == 'item' then
             if input.check('secondary', 'pressed') then
                 input.refresh()
-                battleEngine.changeState('buttons')
+                changeBattleState('buttons')
             end
         elseif battle.state == 'act' then
-            if input.check('secondary', 'pressed') then
-                input.refresh()
-                battleEngine.changeState('choose enemy')
-                battle.subchoice = player.chosenEnemy - 1
-            end
-        elseif battle.state == 'choose enemy' then
-            if input.check('primary', 'pressed') then
-                if battle.choice == 0 then
-                    battleEngine.changeState('fight')
-                elseif battle.choice == 1 then
-                    player.chosenEnemy = battle.subchoice + 1
-                    battleEngine.changeState('act')
-                end
-                
-                sfx.menuselect:stop()
-                sfx.menuselect:play()
-            end
-            if input.check('secondary', 'pressed') then
-                input.refresh()
-                battleEngine.changeState('buttons')
-            end
             if input.check('up', 'pressed') then
                 local last = battle.subchoice
-                battle.subchoice = (battle.subchoice - 1) % (#encounter.enemies)
+                battle.subchoice = (battle.subchoice - 2)
+                if battle.subchoice < 0 then
+                    battle.subchoice = 0
+                end
+                if battle.subchoice > #encounter.enemies[player.chosenEnemy].acts then
+                    battle.subchoice = #encounter.enemies[player.chosenEnemy].acts
+                end
                 if last ~= battle.subchoice then
                     sfx.menumove:stop()
                     sfx.menumove:play()
@@ -122,14 +121,98 @@ function player.update(dt)
             end
             if input.check('down', 'pressed') then
                 local last = battle.subchoice
-                battle.subchoice = (battle.subchoice + 1) % (#encounter.enemies)
+                battle.subchoice = (battle.subchoice + 2)
+                if battle.subchoice < 0 then
+                    battle.subchoice = 0
+                end
+                if battle.subchoice > #encounter.enemies[player.chosenEnemy].acts then
+                    battle.subchoice = #encounter.enemies[player.chosenEnemy].acts
+                end
                 if last ~= battle.subchoice then
                     sfx.menumove:stop()
                     sfx.menumove:play()
                 end
             end
-        player.updatePosition()
-
+            if input.check('left', 'pressed') then
+                local last = battle.subchoice
+                battle.subchoice = (battle.subchoice - 1)
+                if battle.subchoice < 0 then
+                    battle.subchoice = 0
+                end
+                if battle.subchoice > #encounter.enemies[player.chosenEnemy].acts then
+                    battle.subchoice = #encounter.enemies[player.chosenEnemy].acts
+                end
+                if last ~= battle.subchoice then
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
+                end
+            end
+            if input.check('right', 'pressed') then
+                local last = battle.subchoice
+                battle.subchoice = (battle.subchoice + 1)
+                if battle.subchoice < 0 then
+                    battle.subchoice = 0
+                end
+                if battle.subchoice > #encounter.enemies[player.chosenEnemy].acts then
+                    battle.subchoice = #encounter.enemies[player.chosenEnemy].acts
+                end
+                if last ~= battle.subchoice then
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
+                end
+            end
+            if input.check('secondary', 'pressed') then
+                input.refresh()
+                battle.subchoice = player.chosenEnemy - 1
+                changeBattleState('choose enemy')
+            end
+        elseif battle.state == 'choose enemy' then
+            if input.check('primary', 'pressed') then
+                if battle.choice == 0 then
+                    -- Debug stuff so I know the player can go back to the menu after an attack
+                    player.lastButton = battle.choice
+                    battle.choice = -1
+                    changeBattleState('attack')
+                elseif battle.choice == 1 then
+                    player.chosenEnemy = battle.subchoice + 1
+                    changeBattleState('act')
+                    battle.subchoice = 0
+                end
+                sfx.menuselect:stop()
+                sfx.menuselect:play()
+            end
+            if input.check('secondary', 'pressed') then
+                input.refresh()
+                changeBattleState('buttons')
+            end
+            if input.check('up', 'pressed') then
+                local last = battle.subchoice
+                battle.subchoice = (battle.subchoice - 1)
+                if battle.subchoice < 0 then
+                    battle.subchoice = 0
+                end
+                if battle.subchoice > #encounter.enemies-1 then
+                    battle.subchoice = #encounter.enemies-1
+                end
+                if last ~= battle.subchoice then
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
+                end
+            end
+            if input.check('down', 'pressed') then
+                local last = battle.subchoice
+                battle.subchoice = (battle.subchoice + 1)
+                if battle.subchoice < 0 then
+                    battle.subchoice = 0
+                end
+                if battle.subchoice > #encounter.enemies-1 then
+                    battle.subchoice = #encounter.enemies-1
+                end
+                if last ~= battle.subchoice then
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
+                end
+            end
         elseif battle.state == 'buttons' then
             if input.check('right', 'pressed') then
                 battle.choice = (battle.choice + 1) % (#ui.buttons + 1)
@@ -144,7 +227,7 @@ function player.update(dt)
             elseif input.check('primary', 'pressed') then
                 writer.stop()
                 battle.subchoice = 0
-                battleEngine.changeState(ui.buttons[battle.choice].goTo)
+                changeBattleState(ui.buttons[battle.choice].goTo)
                 sfx.menuselect:stop()
                 sfx.menuselect:play()
             end
@@ -208,8 +291,8 @@ function player.update(dt)
                 end
             end
         end
-        player.updatePosition()
     end
+    player.updatePosition()
 end
 
 

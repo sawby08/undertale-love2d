@@ -6,13 +6,19 @@ local refs = {
     items = love.graphics.newImage("refs/items.png"),
 }
 
-function battleEngine.changeState(state)
+function changeBattleState(state)
     battle.state = state
 
     if state == 'buttons' then
+        battle.turn = 'player'
+        ui.box.x = 35
+        ui.box.width = 570
         writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02 * (FPS/30), sfx.text.uifont)
     elseif state == 'attack' then
-       --  ui.box.width = 135
+        for _, enemy in ipairs(encounter.enemies) do
+            enemy.attacks[battle.turnCount]:load()
+        end
+        battle.turn = 'enemies'
         player.heart.x = ui.box.x + ui.box.width / 2 - 8
         player.heart.y = ui.box.y + ui.box.height / 2 - 8
         ui.box.x = 252
@@ -30,7 +36,8 @@ function battleEngine.load(encounterName)
         turn = 'player',
         state = 'buttons',
         choice = 0,
-        subchoice = 0
+        subchoice = 0,
+        turnCount = 1
     }
 
     -- Import assets
@@ -70,11 +77,11 @@ function battleEngine.load(encounterName)
     -- Go to menu or enemy turn
     if encounter.startFirst then
         battle.turn = 'enemies'
-        battleEngine.changeState('attack')
+        changeBattleState('attack')
         battle.choice = -1
     else
         battle.turn = 'player'
-        battleEngine.changeState('buttons')
+        changeBattleState('buttons')
         battle.choice = 0
     end
 end
