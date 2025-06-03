@@ -107,16 +107,18 @@ function ui.draw()
     -- Draw text
     love.graphics.setFont(fonts.determination)
     if battle.state == 'choose enemy' then
-        for i = 1, #encounter.enemies do
-            local string = '  * ' .. encounter.enemies[i].name
+        local i = 1
+        for _, enemy in ipairs(encounter.enemies) do
+            local string = '  * ' .. enemy.name
             love.graphics.setColor(1, 1, 1)
-            love.graphics.print('  * ' .. encounter.enemies[i].name, 52, 242 + (i * 32))
+            love.graphics.print('  * ' .. enemy.name, 52, 242 + (i * 32))
 
             love.graphics.setColor(1/3, 1/3, 1/3)
             love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), 100, 20)
 
             love.graphics.setColor(0, 0.75, 0)
-            love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), ((encounter.enemies[i].hp / encounter.enemies[i].maxHp) * 100), 20)
+            love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), ((enemy.hp / enemy.maxHp) * 100), 20)
+            i = i + 1
         end
     elseif battle.state == 'act' then
         love.graphics.print('  * Check', 52, 274)
@@ -144,6 +146,7 @@ function ui.draw()
     elseif battle.state == 'mercy' then
         love.graphics.print('  * Spare', 52, 274)
         if encounter.canFlee then
+            love.graphics.setColor(1, 1, 1)
             love.graphics.print('  * Flee', 52, 306)
         end
     end

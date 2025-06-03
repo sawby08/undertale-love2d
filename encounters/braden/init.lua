@@ -8,6 +8,7 @@ function encounter.load()
     encounter.startFirst = false
     encounter.canFlee = true
 
+    if encounter.bgm then encounter.bgm:stop() end
     encounter.bgm = love.audio.newSource('encounters/braden/sound/mus.ogg', 'stream')
     encounter.bgm:setVolume(0.5)
     encounter.bgm:setLooping(true)
@@ -27,53 +28,6 @@ function encounter.load()
         imagePath = 'encounters/braden/images/spr_braden.png',
         x = 240,
         y = 42,
-
-        attacks = {
-            {
-                load = function(self)
-                    self.timer = 0
-                end,
-
-                update = function(self, dt)
-                    local prevCount = math.floor(self.timer * 30)
-                    self.timer = self.timer + dt
-                    local currentCount = math.floor(self.timer * 30)
-
-                    if prevCount < 30 and currentCount >= 30 then
-                        battle.choice = player.lastButton
-                        changeBattleState('buttons')
-                        battle.turnCount = battle.turnCount + 1
-                    end
-                end,
-
-                draw = function(self)
-                    love.graphics.print('Attack timer: ' .. self.timer, 5, 5)
-                end
-            },
-            {
-                load = function(self)
-                    self.timer = 0
-                end,
-
-                update = function(self, dt)
-                    local prevCount = math.floor(self.timer * 30)
-                    self.timer = self.timer + dt
-                    local currentCount = math.floor(self.timer * 30)
-
-                    --[[
-                    if prevCount < 30 and currentCount >= 30 then
-                        battle.choice = player.lastButton
-                        changeBattleState('buttons')
-                        battle.turnCount = battle.turnCount + 1
-                    end
-                    ]]
-                end,
-
-                draw = function(self)
-                    love.graphics.print('Attack timer: ' .. self.timer, 5, 37)
-                end
-            }
-        }
     })
 
 
@@ -90,9 +44,7 @@ end
 function encounter.update(dt)
     for _, enemy in ipairs(encounter.enemies) do
         if battle.turn == 'enemies' then
-            if battle.state == 'attack' then
-                enemy.attacks[battle.turnCount]:update(dt)
-            end
+
         end
     end
 end
@@ -102,9 +54,7 @@ function encounter.draw()
     for _, enemy in ipairs(encounter.enemies) do
         enemy:draw()
         if battle.turn == 'enemies' then
-            if battle.state == 'attack' then
-                enemy.attacks[battle.turnCount]:draw()
-            end
+
         end
     end
 end

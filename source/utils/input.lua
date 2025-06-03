@@ -1,12 +1,16 @@
 local input = {}
 
 local keyMap = {
+    -- General keys
     up = {'up', 'w'},
     down = {'down', 's'},
     left = {'left', 'a'},
     right = {'right', 'd'},
     primary = {'z', 'return'},
-    secondary = {'x', 'lshift', 'rshift'}
+    secondary = {'x', 'lshift', 'rshift'},
+
+    -- Debug keys
+    restart = {'r'}
 }
 
 local pressed = {}

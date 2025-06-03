@@ -15,12 +15,9 @@ function changeBattleState(state)
         ui.box.width = 570
         writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02 * (FPS/30), sfx.text.uifont)
     elseif state == 'attack' then
-        for _, enemy in ipairs(encounter.enemies) do
-            enemy.attacks[battle.turnCount]:load()
-        end
         battle.turn = 'enemies'
-        player.heart.x = ui.box.x + ui.box.width / 2 - 8
-        player.heart.y = ui.box.y + ui.box.height / 2 - 8
+        player.heart.x = math.floor(ui.box.x + ui.box.width / 2 - 8)
+        player.heart.y = math.floor(ui.box.y + ui.box.height / 2 - 8)
         ui.box.x = 252
         ui.box.width = 135
     elseif state == 'fight' then
@@ -95,6 +92,10 @@ function battleEngine.update(dt)
     ui.update(dt)
     player.update()
     writer:update(dt)
+
+    if input.check('restart', 'pressed') then
+        love.load()
+    end
 
     input.refresh()
 end
