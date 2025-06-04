@@ -1,4 +1,4 @@
-local timerSleep = function () return 1/FPS end
+local timerSleep = function () return 1/conf.fps end
 function love.run()
 	if love.math then
 		love.math.setRandomSeed(os.time())

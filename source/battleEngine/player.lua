@@ -73,7 +73,7 @@ function player.updatePosition()
 end
 
 function player.load()
-    player.mode = 1
+    player.mode = 2
 end
 
 function player.update(dt)
@@ -167,6 +167,10 @@ function player.update(dt)
                 changeBattleState('choose enemy')
             end
         elseif battle.state == 'choose enemy' then
+            if input.check('secondary', 'pressed') then
+                input.refresh()
+                changeBattleState('buttons')
+            end
             if input.check('primary', 'pressed') then
                 if battle.choice == 0 then
                     -- Debug stuff so I know the player can go back to the menu after an attack
@@ -180,10 +184,6 @@ function player.update(dt)
                 end
                 sfx.menuselect:stop()
                 sfx.menuselect:play()
-            end
-            if input.check('secondary', 'pressed') then
-                input.refresh()
-                changeBattleState('buttons')
             end
             if input.check('up', 'pressed') then
                 local last = battle.subchoice
@@ -237,11 +237,11 @@ function player.update(dt)
             xvel, yvel = 0, 0
             local speed = 4
             if input.check('secondary', 'held') then
-                speed = 2 * dtMultiplier
+                speed = 2 * dt*30
             else
-                speed = 4 * dtMultiplier
+                speed = 4 * dt*30
             end
-            if player.mode == 1 then
+            if player.mode == 1 then -- Red soul movement
                 if input.check('up', 'held') then
                     yvel = yvel - speed
                 end
@@ -254,9 +254,9 @@ function player.update(dt)
                 if input.check('right', 'held') then
                     xvel = xvel + speed
                 end
-            elseif player.mode == 2 then
+            elseif player.mode == 2 then -- Blue soul movement (doesn't adapt to other framerates correctly but I expect you to use this engine in the only good FPS to use in undertale fangames)
                 -- Left and right movement and gravitational pull
-                blueGrav = blueGrav + (0.75 * dtMultiplier)
+                blueGrav = blueGrav + 0.75 * dt*30
                 yvel = yvel + blueGrav
                 if input.check('left', 'held') then
                     xvel = xvel - speed
@@ -276,8 +276,8 @@ function player.update(dt)
                 end
                 if jumpstage == 1 and input.check('up', 'held') and player.heart.y <= ui.box.y + ui.box.height - 19 then
                     -- Make the player jump by 6 pixels and increase jumptimer to prevent the player from jumping too high
-                    blueGrav = -6 * dtMultiplier
-                    jumptimer = jumptimer + love.timer.getDelta()
+                    blueGrav = -6 * dt*30
+                    jumptimer = jumptimer + dt
                 end
                 if player.heart.y <= ui.box.y + ui.box.height - 19 and jumpstage == 1 and not input.check('up', 'held') then
                     -- Change gravity so movement is tighter

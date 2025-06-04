@@ -16,17 +16,45 @@ function encounter.load()
     encounter.backgroundImage = nil
 
     encounter.enemies[1] = Enemy:new({
-        name = "Braden",
+        name = "Sawby",
         description = "* A guy out there in the world.",
         acts = {'Crash', 'Talk'},
+        canSpare = true,
+        showHPBar = false,
+        hp = 100,
+        maxHp = 100,
+        attack = 5,
+        defense = 2,
+        imagePath = 'encounters/braden/images/spr_braden.png',
+        x = 120,
+        y = 42,
+    })
+    encounter.enemies[2] = Enemy:new({
+        name = "bradensMG",
+        description = "* Retired.",
+        acts = {},
         canSpare = false,
-        showHPBar = true,
+        showHPBar = false,
         hp = 100,
         maxHp = 100,
         attack = 5,
         defense = 2,
         imagePath = 'encounters/braden/images/spr_braden.png',
         x = 240,
+        y = 42,
+    })
+    encounter.enemies[3] = Enemy:new({
+        name = "BradensMediocreGames",
+        description = "* Who this this guy?",
+        acts = {},
+        canSpare = false,
+        showHPBar = false,
+        hp = 1,
+        maxHp = 1,
+        attack = 5,
+        defense = 2,
+        imagePath = 'encounters/braden/images/spr_braden.png',
+        x = 360,
         y = 42,
     })
 

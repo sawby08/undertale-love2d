@@ -3,10 +3,20 @@ local currentScene = nil
 local scenes = {
     battleEngine = require 'source.battleEngineState'
 }
+conf = {
+    keys = {
+        up = {'up', 'w'},
+        down = {'down', 's'},
+        left = {'left', 'a'},
+        right = {'right', 'd'},
+        primary = {'z', 'return'},
+        secondary = {'x', 'lshift', 'rshift'}
+    },
+    fps = 30
+}
 
 fps = require 'source.utils.fps'
 input = require 'source.utils.input'
-dtMultiplier = 0
 
 function love.keypressed(key)
     input.keypressed(key)
@@ -20,7 +30,6 @@ end
 
 function love.update(dt)
     currentScene.update(dt)
-    dtMultiplier = dt * 30
 end
 
 function love.draw()

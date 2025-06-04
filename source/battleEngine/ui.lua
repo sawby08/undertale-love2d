@@ -111,13 +111,18 @@ function ui.draw()
         for _, enemy in ipairs(encounter.enemies) do
             local string = '  * ' .. enemy.name
             love.graphics.setColor(1, 1, 1)
+            if enemy.canSpare then
+                love.graphics.setColor(1, 1, 0)
+            end
             love.graphics.print('  * ' .. enemy.name, 52, 242 + (i * 32))
 
-            love.graphics.setColor(1/3, 1/3, 1/3)
-            love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), 100, 20)
+            if enemy.showHPBar then
+                love.graphics.setColor(1/3, 1/3, 1/3)
+                love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), 100, 20)
 
-            love.graphics.setColor(0, 0.75, 0)
-            love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), ((enemy.hp / enemy.maxHp) * 100), 20)
+                love.graphics.setColor(0, 0.75, 0)
+                love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), ((enemy.hp / enemy.maxHp) * 100), 20)
+            end
             i = i + 1
         end
     elseif battle.state == 'act' then
@@ -144,6 +149,12 @@ function ui.draw()
         love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[4], 'seriousName'), 308, 306)
         love.graphics.print('     PAGE 1', 308, 338)
     elseif battle.state == 'mercy' then
+        love.graphics.setColor(1, 1, 1)
+        for _, enemy in ipairs(encounter.enemies) do
+            if enemy.canSpare then
+                love.graphics.setColor(1, 1, 0)
+            end
+        end
         love.graphics.print('  * Spare', 52, 274)
         if encounter.canFlee then
             love.graphics.setColor(1, 1, 1)

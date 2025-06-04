@@ -13,7 +13,7 @@ function changeBattleState(state)
         battle.turn = 'player'
         ui.box.x = 35
         ui.box.width = 570
-        writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02 * (FPS/30), sfx.text.uifont)
+        writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02, sfx.text.uifont)
     elseif state == 'attack' then
         battle.turn = 'enemies'
         player.heart.x = math.floor(ui.box.x + ui.box.width / 2 - 8)
@@ -90,12 +90,8 @@ function battleEngine.update(dt)
     encounter.bgm:play()
 
     ui.update(dt)
-    player.update()
+    player.update(dt)
     writer:update(dt)
-
-    if input.check('restart', 'pressed') then
-        love.load()
-    end
 
     input.refresh()
 end

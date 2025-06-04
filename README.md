@@ -1,2 +1,2 @@
 # undertale-love2d
-UNDERTALE battle engine written in the LOVE game framework
+<p>UNDERTALE battle engine written in the LÖVE game framework.</p>
