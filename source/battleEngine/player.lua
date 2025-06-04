@@ -294,11 +294,13 @@ function player.update(dt)
                 sfx.menumove:play()
                 player.updatePosition()
             elseif input.check('primary', 'pressed') then
-                writer.stop()
-                battle.subchoice = 0
-                changeBattleState(ui.buttons[battle.choice].goTo)
-                sfx.menuselect:stop()
-                sfx.menuselect:play()
+                if ui.buttons[battle.choice].canSelect then
+                    writer.stop()
+                    battle.subchoice = 0
+                    changeBattleState(ui.buttons[battle.choice].goTo)
+                    sfx.menuselect:stop()
+                    sfx.menuselect:play()
+                end
             end
         end
     elseif battle.turn == 'enemies' then

@@ -12,6 +12,7 @@ function ui.newButton(name, x, y, id, goTo)
     button.x = x
     button.y = y
     button.id = id
+    button.canSelect = true
     button.goTo = goTo or name
     ui.buttons[id] = button
 end
@@ -39,12 +40,19 @@ function ui.load()
 end
 
 function ui.update(dt)
-    -- nothing for now
+    if #player.inventory < 1 then
+        ui.buttons[2].canSelect = false
+    end
 end
 
 function ui.draw()
     -- Draw buttons
     for _, button in pairs(ui.buttons) do
+        if button.canSelect then
+            love.graphics.setColor(1, 1, 1)
+        else
+            love.graphics.setColor(1, 1, 1, .5)
+        end
         love.graphics.draw(
             button.image,
             button.quads[(battle.choice == button.id) and 2 or 1],
