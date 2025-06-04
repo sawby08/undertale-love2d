@@ -21,8 +21,8 @@ conf = {
     fullscreen = false,
     
     bgmVolume = 0.5,
-    sfxVolume = 0,
-    textVolume = 0,
+    sfxVolume = 1,
+    textVolume = 1,
     mainVolume = 1
 }
 
@@ -71,7 +71,8 @@ function love.update(dt)
 
     currentScene.update(dt)
     if input.check('fullscreen', 'pressed') then
-        fullscreen = not conf.fullscreen
+        conf.fullscreen = not conf.fullscreen
+        local fullscreen = conf.fullscreen
 		love.window.setFullscreen(fullscreen, "desktop")
     end
 
