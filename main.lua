@@ -20,7 +20,7 @@ conf = {
     fps = 30,
     fullscreen = false,
     
-    bgmVolume = 0.5,
+    bgmVolume = 0,
     sfxVolume = 1,
     textVolume = 1,
     mainVolume = 1

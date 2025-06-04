@@ -48,8 +48,20 @@ function player.updatePosition()
                 player.heart.y = 343
             end
         elseif battle.state == 'item' then
-            player.heart.x = 64
-            player.heart.y = 278
+            local placement = battle.subchoice % 4
+            if placement == 0 then
+                player.heart.x = 64
+                player.heart.y = 278
+            elseif placement == 1 then
+                player.heart.x = 304
+                player.heart.y = 278
+            elseif placement == 2 then
+                player.heart.x = 64
+                player.heart.y = 310
+            elseif placement == 3 then
+                player.heart.x = 304
+                player.heart.y = 310
+            end
         end
     end
     if battle.turn == 'enemies' then
@@ -73,7 +85,7 @@ function player.updatePosition()
 end
 
 function player.load()
-    player.mode = 1
+    player.mode = 2
 end
 
 function player.update(dt)
@@ -100,6 +112,63 @@ function player.update(dt)
                 player.updatePosition()
             end
         elseif battle.state == 'item' then
+            -- Note: #player.inventory is subtracted by one because battle.subchoice iterates from 0. This doesn't present a problem for act since check isn't included but since all items are included I have to do it like this
+            if input.check('up', 'pressed') then
+                local last = battle.subchoice
+                battle.subchoice = (battle.subchoice - 2)
+                if battle.subchoice < 0 then
+                    battle.subchoice = 0
+                end
+                if battle.subchoice > #player.inventory-1 then
+                    battle.subchoice = #player.inventory-1
+                end
+                if last ~= battle.subchoice then
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
+                end
+            end
+            if input.check('down', 'pressed') then
+                local last = battle.subchoice
+                battle.subchoice = (battle.subchoice + 2)
+                if battle.subchoice < 0 then
+                    battle.subchoice = 0
+                end
+                if battle.subchoice > #player.inventory-1 then
+                    battle.subchoice = #player.inventory-1
+                end
+                if last ~= battle.subchoice then
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
+                end
+            end
+            if input.check('left', 'pressed') then
+                local last = battle.subchoice
+                battle.subchoice = (battle.subchoice - 1)
+                if battle.subchoice < 0 then
+                    battle.subchoice = 0
+                end
+                if battle.subchoice > #player.inventory-1 then
+                    battle.subchoice = #player.inventory-1
+                end
+                if last ~= battle.subchoice then
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
+                end
+            end
+            if input.check('right', 'pressed') then
+                local last = battle.subchoice
+                battle.subchoice = (battle.subchoice + 1)
+                if battle.subchoice < 0 then
+                    battle.subchoice = 0
+                end
+                if battle.subchoice > #player.inventory-1 then
+                    battle.subchoice = #player.inventory-1
+                end
+                if last ~= battle.subchoice then
+                    sfx.menumove:stop()
+                    sfx.menumove:play()
+                end
+            end
             if input.check('secondary', 'pressed') then
                 input.refresh()
                 changeBattleState('buttons')
