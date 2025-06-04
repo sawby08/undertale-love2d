@@ -73,7 +73,7 @@ function player.updatePosition()
 end
 
 function player.load()
-    player.mode = 2
+    player.mode = 1
 end
 
 function player.update(dt)

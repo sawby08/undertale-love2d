@@ -1,7 +1,7 @@
 local encounter = {}
 encounter.enemies = {}
 
-local Enemy = require("source.utils.enemyClass")
+local Enemy = require("source.utils.battleEngine.enemyClass")
 
 function encounter.load()
     encounter.text = "[clear]* DELTARUNE chapters 3 and 4[break]  release [rainbow]June [clear]4."
@@ -72,7 +72,11 @@ end
 function encounter.update(dt)
     for _, enemy in ipairs(encounter.enemies) do
         if battle.turn == 'enemies' then
-
+            if input.check('secondary', 'pressed') then
+                battle.choice = player.lastButton
+                input.refresh()
+                changeBattleState('buttons')
+            end
         end
     end
 end

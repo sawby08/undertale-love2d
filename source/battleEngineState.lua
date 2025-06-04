@@ -16,8 +16,8 @@ function changeBattleState(state)
         writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02, sfx.text.uifont)
     elseif state == 'attack' then
         battle.turn = 'enemies'
-        player.heart.x = math.floor(ui.box.x + ui.box.width / 2 - 8)
-        player.heart.y = math.floor(ui.box.y + ui.box.height / 2 - 8)
+        player.heart.x = ui.box.x + ui.box.width / 2 - 8
+        player.heart.y = ui.box.y + ui.box.height / 2 - 8
         ui.box.x = 252
         ui.box.width = 135
     elseif state == 'fight' then
@@ -58,7 +58,7 @@ function battleEngine.load(encounterName)
     ui = require 'source.battleEngine.ui'
     writer = require 'source.utils.writer'
     encounter = require('encounters/' .. encounterName)
-    itemManager = require 'source.utils.itemManager'
+    itemManager = require 'source.utils.battleEngine.itemManager'
 
     -- Load objects
     encounter.load()
@@ -84,16 +84,12 @@ function battleEngine.load(encounterName)
 end
 
 function battleEngine.update(dt)
-    input.update(dt)
-
     encounter.update(dt)
     encounter.bgm:play()
 
     ui.update(dt)
     player.update(dt)
     writer:update(dt)
-
-    input.refresh()
 end
 
 function battleEngine.draw()
