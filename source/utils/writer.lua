@@ -49,6 +49,9 @@ local index = 1
 local doingText = false
 
 writer.isDone = nil
+writer.voices = {
+    menuText = love.audio.newSource('assets/sound/voice/uifont.wav', 'static')
+}
 
 local colors = {
     white = {1, 1, 1},

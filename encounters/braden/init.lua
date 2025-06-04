@@ -10,7 +10,7 @@ function encounter.load()
 
     if encounter.bgm then encounter.bgm:stop() end
     encounter.bgm = love.audio.newSource('encounters/braden/sound/mus.ogg', 'stream')
-    encounter.bgm:setVolume(0.5)
+    encounter.bgm:setVolume(conf.bgmVolume)
     encounter.bgm:setLooping(true)
 
     encounter.backgroundImage = nil

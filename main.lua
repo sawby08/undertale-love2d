@@ -6,6 +6,7 @@ local scenes = {
 
 fps = require 'source.utils.fps'
 input = require 'source.utils.input'
+-- A menu for this will be made eventually
 conf = {
     keys = {
         up = {'up', 'w'},
@@ -16,7 +17,13 @@ conf = {
         secondary = {'x', 'lshift', 'rshift'},
         fullscreen = {'f4'}
     },
-    fps = 30
+    fps = 30,
+    fullscreen = false,
+    
+    bgmVolume = 0.5,
+    sfxVolume = 0,
+    textVolume = 0,
+    mainVolume = 1
 }
 
 local virtualWidth = 640
@@ -52,6 +59,7 @@ function love.load()
     updateScale()
 
     currentScene.load('braden')
+    love.audio.setVolume(conf.mainVolume)
 end
 
 function love.resize(w, h)
@@ -63,7 +71,7 @@ function love.update(dt)
 
     currentScene.update(dt)
     if input.check('fullscreen', 'pressed') then
-        fullscreen = not fullscreen
+        fullscreen = not conf.fullscreen
 		love.window.setFullscreen(fullscreen, "desktop")
     end
 

@@ -13,7 +13,7 @@ function changeBattleState(state)
         battle.turn = 'player'
         ui.box.x = 35
         ui.box.width = 570
-        writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02, sfx.text.uifont)
+        writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02, writer.voices.menuText)
     elseif state == 'attack' then
         battle.turn = 'enemies'
         player.heart.x = ui.box.x + ui.box.width / 2 - 8
@@ -41,11 +41,6 @@ function battleEngine.load(encounterName)
     sfx = {
         menumove = love.audio.newSource('assets/sound/menuMove.ogg', 'static'),
         menuselect = love.audio.newSource('assets/sound/menuSelect.ogg', 'static'),
-
-        text = {
-            uifont = love.audio.newSource('assets/sound/voice/uifont.wav', 'static'),
-            sans = love.audio.newSource('assets/sound/voice/v_sans.wav', 'static')
-        }
     }
     fonts = {
         mars = love.graphics.newFont('assets/fonts/Mars_Needs_Cunnilingus.ttf', 23),
@@ -53,10 +48,19 @@ function battleEngine.load(encounterName)
         default = love.graphics.newFont(14)
     }
 
+    -- Set all sounds to player configuration
+    for _, sound in pairs(sfx) do
+        sound:setVolume(conf.sfxVolume)
+    end
+
     -- Import objects
     player = require 'source.battleEngine.player'
     ui = require 'source.battleEngine.ui'
     writer = require 'source.utils.writer'
+    -- Set writer volume to player configuration
+    for _, sound in pairs(writer.voices) do
+        sound:setVolume(conf.textVolume)
+    end
     encounter = require('encounters/' .. encounterName)
     itemManager = require 'source.utils.battleEngine.itemManager'
 
