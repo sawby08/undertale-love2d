@@ -12,7 +12,7 @@ function love.conf(t)
         },
         fps = 30,
         fullscreen = false,
-        gameScale = 0.75,
+        gameScale = 1,
         
         bgmVolume = 0,
         sfxVolume = 1,
