@@ -1,13 +1,5 @@
 function love.conf(t)
-    t.window.width = 640
-    t.window.height = 480
-    t.window.vsync = true
-    t.window.fullscreentype = "desktop"
-    t.window.resizable = false
-
-    t.window.title = "UNDERTALE"
-    t.window.icon = "icon.png"
-
+    -- A menu for this will be made eventually
     conf = {
         keys = {
             up = {'up', 'w'},
@@ -18,6 +10,22 @@ function love.conf(t)
             secondary = {'x', 'lshift', 'rshift'},
             fullscreen = {'f4'}
         },
-        fps = 30
+        fps = 30,
+        fullscreen = false,
+        gameScale = 0.75,
+        
+        bgmVolume = 0,
+        sfxVolume = 1,
+        textVolume = 1,
+        mainVolume = 1
     }
+
+    t.window.width = 640 * conf.gameScale
+    t.window.height = 480 * conf.gameScale
+    t.window.vsync = true
+    t.window.fullscreentype = "desktop"
+    t.window.resizable = false
+
+    t.window.title = "UNDERTALE"
+    t.window.icon = "icon.png"
 end

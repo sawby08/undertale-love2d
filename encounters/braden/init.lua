@@ -4,7 +4,7 @@ encounter.enemies = {}
 local Enemy = require("source.utils.battleEngine.enemyClass")
 
 function encounter.load()
-    encounter.text = "[clear]* DELTARUNE chapters 3 and 4[break]  release [rainbow]June [clear]4."
+    encounter.text = "[clear]* DELTARUNE chapters 3 and 4[break]  have released [rainbow]June [clear]4."
     encounter.startFirst = false
     encounter.canFlee = true
 

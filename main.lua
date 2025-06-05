@@ -6,25 +6,6 @@ local scenes = {
 
 fps = require 'source.utils.fps'
 input = require 'source.utils.input'
--- A menu for this will be made eventually
-conf = {
-    keys = {
-        up = {'up', 'w'},
-        down = {'down', 's'},
-        left = {'left', 'a'},
-        right = {'right', 'd'},
-        primary = {'z', 'return'},
-        secondary = {'x', 'lshift', 'rshift'},
-        fullscreen = {'f4'}
-    },
-    fps = 30,
-    fullscreen = false,
-    
-    bgmVolume = 0,
-    sfxVolume = 1,
-    textVolume = 1,
-    mainVolume = 1
-}
 
 local virtualWidth = 640
 local virtualHeight = 480
