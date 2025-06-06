@@ -2,6 +2,7 @@ local encounter = {}
 encounter.enemies = {}
 
 local Enemy = require("source.utils.battleEngine.enemyClass")
+local battleEngine = require("source.battleEngineState")
 
 function encounter.load()
     encounter.text = "[clear]* DELTARUNE chapters 3 and 4[break]  have released [rainbow]June [clear]4."
@@ -19,42 +20,14 @@ function encounter.load()
         name = "Sawby",
         description = "* A guy out there in the world.",
         acts = {'Crash', 'Talk'},
-        canSpare = true,
-        showHPBar = false,
+        canSpare = false,
+        showHPBar = true,
         hp = 100,
         maxHp = 100,
         attack = 5,
         defense = 2,
         imagePath = 'encounters/braden/images/spr_braden.png',
-        x = 120,
-        y = 42,
-    })
-    encounter.enemies[2] = Enemy:new({
-        name = "bradensMG",
-        description = "* Retired and defensive.",
-        acts = {},
-        canSpare = false,
-        showHPBar = false,
-        hp = 50,
-        maxHp = 50,
-        attack = 3,
-        defense = 10,
-        imagePath = 'encounters/braden/images/spr_braden.png',
-        x = 240,
-        y = 42,
-    })
-    encounter.enemies[3] = Enemy:new({
-        name = "BradensMediocreGames",
-        description = "* Who this this guy?",
-        acts = {},
-        canSpare = false,
-        showHPBar = false,
-        hp = 1,
-        maxHp = 1,
-        attack = 1,
-        defense = 1,
-        imagePath = 'encounters/braden/images/spr_braden.png',
-        x = 360,
+        x = 252,
         y = 42,
     })
 
@@ -75,7 +48,7 @@ function encounter.update(dt)
             if input.check('secondary', 'pressed') then
                 battle.choice = player.lastButton
                 input.refresh()
-                changeBattleState('buttons')
+                battleEngine.changeBattleState('buttons')
             end
         end
     end

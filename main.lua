@@ -39,7 +39,7 @@ function love.load()
     canvas = love.graphics.newCanvas(virtualWidth, virtualHeight)
     updateScale()
 
-    currentScene.load('braden')
+    currentScene.load('Test enemies')
     love.audio.setVolume(conf.mainVolume)
 end
 

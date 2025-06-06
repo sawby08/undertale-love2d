@@ -14,10 +14,10 @@ function love.conf(t)
         fullscreen = false,
         gameScale = 1,
         
-        bgmVolume = 0,
+        bgmVolume = .5,
         sfxVolume = 1,
         textVolume = 1,
-        mainVolume = 1
+        mainVolume = .5
     }
 
     t.window.width = 640 * conf.gameScale

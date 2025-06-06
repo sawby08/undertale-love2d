@@ -16,7 +16,7 @@ player.heart = {
 player.stats = {}
 
 -- This only exists because I don't know a better way to make the heart not delayed between menu states
-function player.updatePosition()
+local function updatePosition()
     if battle.turn == 'player' then
         if battle.state == 'fight' then
             player.heart.x = -16
@@ -85,7 +85,7 @@ function player.updatePosition()
 end
 
 function player.load()
-    player.mode = 2
+    player.mode = 1
 end
 
 function player.update(dt)
@@ -93,7 +93,7 @@ function player.update(dt)
         if battle.state == 'mercy' then
             if input.check('secondary', 'pressed') then
                 input.refresh()
-                changeBattleState('buttons')
+                battleEngine.changeBattleState('buttons')
             end
             if input.check('down', 'pressed') and encounter.canFlee then
                 if encounter.canFlee and battle.subchoice == 0 then
@@ -101,7 +101,7 @@ function player.update(dt)
                     sfx.menumove:play()
                 end
                 battle.subchoice = 1
-                player.updatePosition()
+                updatePosition()
             end
             if input.check('up', 'pressed') then
                 if battle.subchoice == 1 then
@@ -109,7 +109,7 @@ function player.update(dt)
                     sfx.menumove:play()
                 end
                 battle.subchoice = 0
-                player.updatePosition()
+                updatePosition()
             end
         elseif battle.state == 'item' then
             -- Note: #player.inventory is subtracted by one because battle.subchoice iterates from 0. This doesn't present a problem for act since check isn't included but since all items are included I have to do it like this
@@ -171,7 +171,7 @@ function player.update(dt)
             end
             if input.check('secondary', 'pressed') then
                 input.refresh()
-                changeBattleState('buttons')
+                battleEngine.changeBattleState('buttons')
             end
         elseif battle.state == 'act' then
             if input.check('up', 'pressed') then
@@ -233,22 +233,22 @@ function player.update(dt)
             if input.check('secondary', 'pressed') then
                 input.refresh()
                 battle.subchoice = player.chosenEnemy - 1
-                changeBattleState('choose enemy')
+                battleEngine.changeBattleState('choose enemy')
             end
         elseif battle.state == 'choose enemy' then
             if input.check('secondary', 'pressed') then
                 input.refresh()
-                changeBattleState('buttons')
+                battleEngine.changeBattleState('buttons')
             end
             if input.check('primary', 'pressed') then
                 if battle.choice == 0 then
                     -- Debug stuff so I know the player can go back to the menu after an attack
                     player.lastButton = battle.choice
                     battle.choice = -1
-                    changeBattleState('attack')
+                    battleEngine.changeBattleState('attack')
                 elseif battle.choice == 1 then
                     player.chosenEnemy = battle.subchoice + 1
-                    changeBattleState('act')
+                    battleEngine.changeBattleState('act')
                     battle.subchoice = 0
                 end
                 sfx.menuselect:stop()
@@ -287,17 +287,17 @@ function player.update(dt)
                 battle.choice = (battle.choice + 1) % (#ui.buttons + 1)
                 sfx.menumove:stop()
                 sfx.menumove:play()
-                player.updatePosition()
+                updatePosition()
             elseif input.check('left', 'pressed') then
                 battle.choice = (battle.choice - 1) % (#ui.buttons + 1)
                 sfx.menumove:stop()
                 sfx.menumove:play()
-                player.updatePosition()
+                updatePosition()
             elseif input.check('primary', 'pressed') then
                 if ui.buttons[battle.choice].canSelect then
                     writer.stop()
                     battle.subchoice = 0
-                    changeBattleState(ui.buttons[battle.choice].goTo)
+                    battleEngine.changeBattleState(ui.buttons[battle.choice].goTo)
                     sfx.menuselect:stop()
                     sfx.menuselect:play()
                 end
@@ -363,7 +363,7 @@ function player.update(dt)
             end
         end
     end
-    player.updatePosition()
+    updatePosition()
 end
 
 

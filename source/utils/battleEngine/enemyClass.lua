@@ -8,6 +8,7 @@ function Enemy:new(config)
     self.description = config.description or ""
     self.acts = config.acts or {}
     self.canSpare = config.canSpare or false
+    self.showHPBar = config.showHPBar or false
 
     self.hp = config.hp or 0
     self.maxHp = config.maxHp or 0
@@ -15,9 +16,9 @@ function Enemy:new(config)
     self.defense = config.defense or 0
 
     self.image = love.graphics.newImage(config.imagePath)
+    self.imageScale = config.imageScale
     self.x = config.x or 0
     self.y = config.y or 0
-
     self.xOffset = 0
     self.yOffset = 0
 
@@ -37,7 +38,7 @@ function Enemy:draw()
         self.image,
         self.x + self.xOffset,
         self.y + self.yOffset,
-        0, 2
+        0, self.imageScale
     )
 
     -- Optionally draw attacks

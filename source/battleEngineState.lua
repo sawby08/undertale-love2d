@@ -6,14 +6,20 @@ local refs = {
     items = love.graphics.newImage("refs/items.png"),
 }
 
-function changeBattleState(state)
+function battleEngine.changeBattleState(state)
     battle.state = state
 
     if state == 'buttons' then
         battle.turn = 'player'
         ui.box.x = 35
         ui.box.width = 570
-        writer:setParams(encounter.text, 52, 274, fonts.determination, 0.02, writer.voices.menuText)
+        local encounterText
+        if type(encounter.text) == 'string' then
+            encounterText = encounter.text
+        else
+            encounterText = encounter.text[love.math.random(1, #encounter.text)]
+        end
+        writer:setParams(encounterText, 52, 274, fonts.determination, 0.02, writer.voices.menuText)
     elseif state == 'attack' then
         battle.turn = 'enemies'
         player.heart.x = ui.box.x + ui.box.width / 2 - 8
@@ -23,8 +29,6 @@ function changeBattleState(state)
     elseif state == 'fight' then
         battle.choice = -1
     end
-
-    player.updatePosition()
 end
 
 function battleEngine.load(encounterName)
@@ -78,11 +82,11 @@ function battleEngine.load(encounterName)
     -- Go to menu or enemy turn
     if encounter.startFirst then
         battle.turn = 'enemies'
-        changeBattleState('attack')
+        battleEngine.changeBattleState('attack')
         battle.choice = -1
     else
         battle.turn = 'player'
-        changeBattleState('buttons')
+        battleEngine.changeBattleState('buttons')
         battle.choice = 0
     end
 end
@@ -100,8 +104,8 @@ function battleEngine.draw()
     -- Saves the graphics state so drawing the ref and black base doesn't mess up the other stuff
     love.graphics.push("all")
 
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.rectangle('fill', 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+    love.graphics.setColor(encounter.backgroundColor)
+    love.graphics.rectangle('fill', 0, 0, 640, 480)
 
     love.graphics.setColor(1, 1, 1, 0)
     love.graphics.draw(refs.acts, 0, 0, 0, 0.5)

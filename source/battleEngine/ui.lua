@@ -126,10 +126,10 @@ function ui.draw()
 
             if enemy.showHPBar then
                 love.graphics.setColor(1/3, 1/3, 1/3)
-                love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), 100, 20)
+                love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), 125, 20)
 
                 love.graphics.setColor(0, 0.75, 0)
-                love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), ((enemy.hp / enemy.maxHp) * 100), 20)
+                love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), ((enemy.hp / enemy.maxHp) * 125), 20)
             end
             i = i + 1
         end
