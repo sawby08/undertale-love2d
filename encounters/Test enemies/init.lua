@@ -29,15 +29,17 @@ function encounter.load()
     -- Enemy configuration
     encounter.enemies[1] = Enemy:new({
         name = "Enemy 1",
-        description = "* .",
-        acts = {'Crash', 'Talk'},
+        description = "[clear]* It can't land a punch but it can take one.",
+        acts = {'Talk', 'Shield'},
+
         canSpare = false,
         showHPBar = true,
+        canDodge = false,
 
         hp = 100,
         maxHp = 100,
         attack = 2,
-        defense = 4,
+        defense = 5,
 
         imagePath = encounterPath .. 'images/test1.png',
         imageScale = 1,
@@ -48,14 +50,14 @@ function encounter.load()
     })
     encounter.enemies[2] = Enemy:new({
         name = "Enemy 2",
-        description = "* A guy out there in the world.",
-        acts = {'Crash', 'Talk'},
+        description = "[clear]* A flier.[break]* Not too many fliers around here.",
+        acts = {'Flap'},
         canSpare = false,
         showHPBar = true,
 
-        hp = 100,
-        maxHp = 100,
-        attack = 5,
+        hp = 50,
+        maxHp = 50,
+        attack = 2,
         defense = 2,
 
         imagePath = encounterPath .. 'images/test2.png',

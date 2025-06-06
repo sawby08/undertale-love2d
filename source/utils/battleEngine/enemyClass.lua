@@ -7,8 +7,10 @@ function Enemy:new(config)
     self.name = config.name or "Unknown"
     self.description = config.description or ""
     self.acts = config.acts or {}
+
     self.canSpare = config.canSpare or false
     self.showHPBar = config.showHPBar or false
+    self.canDodge = config.canDodge or false
 
     self.hp = config.hp or 0
     self.maxHp = config.maxHp or 0
