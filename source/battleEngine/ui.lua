@@ -134,22 +134,12 @@ function ui.draw()
             i = i + 1
         end
     elseif battle.state == 'act' then
-        love.graphics.print('  * Check', 52, 274)
-        if #encounter.enemies[player.chosenEnemy].acts > 0 then
-            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[1], 324, 274)
-        end
-        if #encounter.enemies[player.chosenEnemy].acts > 1 then
-            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[2], 52, 306)
-        end
-        if #encounter.enemies[player.chosenEnemy].acts > 2 then
-            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[3], 324, 306)
-        end
-        if #encounter.enemies[player.chosenEnemy].acts > 3 then
-            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[4], 52, 338)
-        end
-        if #encounter.enemies[player.chosenEnemy].acts > 4 then
-            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[5], 324, 338)
-        end
+        love.graphics.print('  * Check', 68, 274)
+        if #encounter.enemies[player.chosenEnemy].acts > 0 then love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[1], 324, 274) end
+        if #encounter.enemies[player.chosenEnemy].acts > 1 then love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[2], 68, 306) end
+        if #encounter.enemies[player.chosenEnemy].acts > 2 then love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[3], 324, 306) end
+        if #encounter.enemies[player.chosenEnemy].acts > 3 then love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[4], 68, 338) end
+        if #encounter.enemies[player.chosenEnemy].acts > 4 then love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[5], 324, 338) end
     elseif battle.state == 'item' then
         local itemPage = math.floor(battle.subchoice / 4)
         if player.inventory[1 + (itemPage*4)] then love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[1 + (itemPage*4)], 'seriousName'), 68, 274) end

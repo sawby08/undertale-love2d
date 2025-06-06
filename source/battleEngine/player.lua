@@ -29,23 +29,23 @@ function player.updatePosition()
             player.heart.y = 279 + (battle.subchoice * 32)
         elseif battle.state == 'act' then
             if battle.subchoice == 0 then
-                player.heart.x = 55
-                player.heart.y = 279
+                player.heart.x = 64
+                player.heart.y = 278
             elseif battle.subchoice == 1 then
-                player.heart.x = 327
-                player.heart.y = 279
+                player.heart.x = 320
+                player.heart.y = 278
             elseif battle.subchoice == 2 then
-                player.heart.x = 55
-                player.heart.y = 311
+                player.heart.x = 64
+                player.heart.y = 310
             elseif battle.subchoice == 3 then
-                player.heart.x = 327
-                player.heart.y = 311
+                player.heart.x = 320
+                player.heart.y = 310
             elseif battle.subchoice == 4 then
-                player.heart.x = 55
-                player.heart.y = 343
+                player.heart.x = 64
+                player.heart.y = 342
             elseif battle.subchoice == 5 then
-                player.heart.x = 327
-                player.heart.y = 343
+                player.heart.x = 320
+                player.heart.y = 342
             end
         elseif battle.state == 'item' then
             local placement = battle.subchoice % 4

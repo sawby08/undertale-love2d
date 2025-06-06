@@ -104,7 +104,7 @@ function battleEngine.draw()
     love.graphics.rectangle('fill', 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
     love.graphics.setColor(1, 1, 1, 0)
-    love.graphics.draw(refs.items, 20, 1, 0, 0.5)
+    love.graphics.draw(refs.acts, 0, 0, 0, 0.5)
 
     love.graphics.pop()
 
