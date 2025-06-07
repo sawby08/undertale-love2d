@@ -16,7 +16,7 @@ player.stats = {}
 -- This only exists because I don't know a better way to make the heart not delayed between menu states
 local function updatePosition()
     if battle.turn == 'player' then
-        if battle.state == 'fight' then
+        if battle.state == 'fight' or battle.state == 'perform act' then
             player.heart.x = -16
             player.heart.y = -16
         elseif battle.state == 'buttons' then
@@ -158,6 +158,9 @@ function player.update(dt)
                 input.refresh()
                 battle.subchoice = player.chosenEnemy - 1
                 battleEngine.changeBattleState('choose enemy')
+            end
+            if input.check('primary', 'pressed') then
+                battleEngine.changeBattleState('perform act')
             end
         elseif battle.state == 'choose enemy' then
             if input.check('secondary', 'pressed') then

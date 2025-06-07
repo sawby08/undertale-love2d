@@ -14,7 +14,7 @@ function love.conf(t)
         fullscreen = false,
         gameScale = 1,
         
-        bgmVolume = .5,
+        bgmVolume = 0.5,
         sfxVolume = 1,
         textVolume = 1,
         mainVolume = .5

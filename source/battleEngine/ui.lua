@@ -135,18 +135,21 @@ function ui.draw()
         end
     elseif battle.state == 'act' then
         love.graphics.print('  * Check', 68, 274)
-        if #encounter.enemies[player.chosenEnemy].acts > 0 then love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[1], 324, 274) end
-        if #encounter.enemies[player.chosenEnemy].acts > 1 then love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[2], 68, 306) end
-        if #encounter.enemies[player.chosenEnemy].acts > 2 then love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[3], 324, 306) end
-        if #encounter.enemies[player.chosenEnemy].acts > 3 then love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[4], 68, 338) end
-        if #encounter.enemies[player.chosenEnemy].acts > 4 then love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[5], 324, 338) end
+        local positions = { {x = 324, y = 274}, {x = 68, y = 306}, {x = 324, y = 306}, {x = 68, y = 338}, {x = 324, y = 338} }
+        for i = 1, #encounter.enemies[player.chosenEnemy].acts do
+            love.graphics.print('  * ' .. encounter.enemies[player.chosenEnemy].acts[i].name, positions[i].x, positions[i].y)
+        end
     elseif battle.state == 'item' then
         local itemPage = math.floor(battle.subchoice / 4)
-        if player.inventory[1 + (itemPage*4)] then love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[1 + (itemPage*4)], 'seriousName'), 68, 274) end
-        if player.inventory[2 + (itemPage*4)] then love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[2 + (itemPage*4)], 'seriousName'), 308, 274) end
-        if player.inventory[3 + (itemPage*4)] then love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[3 + (itemPage*4)], 'seriousName'), 68, 306) end
-        if player.inventory[4 + (itemPage*4)] then love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[4 + (itemPage*4)], 'seriousName'), 308, 306) end
-        love.graphics.print('     PAGE ' .. itemPage+1, 308, 338)
+        local positions = { {x = 68,  y = 274}, {x = 308, y = 274}, {x = 68,  y = 306}, {x = 308, y = 306} }
+        for i = 1, 4 do
+            if player.inventory[i + (itemPage * 4)] then
+                love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[i + (itemPage * 4)], 'seriousName'), positions[i].x, positions[i].y)
+            end
+        end
+        if #player.inventory > 4 then
+            love.graphics.print('     PAGE ' .. itemPage+1, 308, 338)
+        end
     elseif battle.state == 'mercy' then
         love.graphics.setColor(1, 1, 1)
         for _, enemy in ipairs(encounter.enemies) do

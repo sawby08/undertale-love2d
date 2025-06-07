@@ -24,12 +24,8 @@ function Enemy:new(config)
     self.xOffset = 0
     self.yOffset = 0
 
-    -- Store attacks and call load() on each if defined
-    self.attacks = config.attacks or {}
-    for _, attack in ipairs(self.attacks) do
-        if type(attack.load) == "function" then
-            attack:load()
-        end
+    for _, act in ipairs(self.acts) do
+        act.enemy = self
     end
 
     return self
@@ -42,13 +38,6 @@ function Enemy:draw()
         self.y + self.yOffset,
         0, self.imageScale
     )
-
-    -- Optionally draw attacks
-    for _, attack in ipairs(self.attacks) do
-        if type(attack.draw) == "function" then
-            attack:draw()
-        end
-    end
 end
 
 function Enemy:update(dt)

@@ -8,6 +8,13 @@ local battleEngine = require("source.battleEngineState")
 -- This makes importing images/sounds and stuff easier
 local encounterPath = "encounters/Test enemies/" -- Rename "Test enemies" to the name of your encounter folder
 
+-- Makes it easier for me
+local function performAct(act)
+    if type(act.execute) == "function" then
+        act:execute()
+    end
+end
+
 -- The main stuff that can be edited
 function encounter.load()
     -- General encounter configuration
@@ -29,8 +36,29 @@ function encounter.load()
     -- Enemy configuration
     encounter.enemies[1] = Enemy:new({
         name = "Enemy 1",
-        description = "[clear]* It can't land a punch but it can take one.",
-        acts = {'Talk', 'Shield'},
+        description = "[clear]* The first half of the test[break]  site.",
+        acts = {
+            {
+                name = 'Talk',
+                execute = function()
+                    -- nothing
+                end,
+                text = {
+                    "* You try to talk to it.",
+                    "* ...not much of a talker, I guess."
+                }
+            },
+            {
+                name = 'Unfinished',
+                execute = function(self)
+                    self.enemy.canSpare = true
+                end,
+                text = {
+                    '[clear]* You point your arms out into[break]  opposite directions to form a[break]  "T" shape.',
+                    "[clear]* Liking your now unfinished[break]  appearance, Enemy 1 is[break]  [yellow]sparing you."
+                }
+            },
+        },
 
         canSpare = false,
         showHPBar = true,
@@ -50,8 +78,20 @@ function encounter.load()
     })
     encounter.enemies[2] = Enemy:new({
         name = "Enemy 2",
-        description = "[clear]* A flier.[break]* Not too many fliers around here.",
+        description = "[clear]* The other half of the test[break]  site.",
         acts = {'Flap'},
+        acts = {
+            {
+                name = 'Flap',
+                execute = function(self)
+                    self.enemy.canSpare = true
+                end,
+                text = {
+                    "* You flap your arms like they're wings.",
+                    "* Enemy 2 appreciates your effort     [break][clear][yellow]* Enemy 2 is sparing you.."
+                }
+            }
+        },
         canSpare = false,
         showHPBar = true,
 
@@ -69,8 +109,8 @@ function encounter.load()
     })
 
     -- Player specific encounter stats
-    player.stats.love = 7
-    player.stats.name = 'John'
+    player.stats.love = 8
+    player.stats.name = 'A guy'
     player.inventory = {11, 1, 1, 23, 17, 19, 19, 10}
     player.hasKR = false
 
@@ -80,9 +120,22 @@ function encounter.load()
     player.kr = 0
 end
 
+function encounter.doAct()
+    player.lastButton = battle.choice
+    battle.choice = -1
+    local enemy = encounter.enemies[player.chosenEnemy]
+    if battle.subchoice > 0 then
+        performAct(enemy.acts[battle.subchoice])
+        writer:setParams(enemy.acts[battle.subchoice].text[1], 52, 274, fonts.determination, 0.02, writer.voices.menuText)
+    else
+        writer:setParams("* " .. string.upper(enemy.name) .. " - ATT " .. enemy.attack .. " DEF " .. enemy.defense .. "[break]" .. enemy.description, 52, 274, fonts.determination, 0.02, writer.voices.menuText)
+    end
+    battle.subchoice = 0
+end
+
 function encounter.update(dt)
     for _, enemy in ipairs(encounter.enemies) do
-        if enemy.name == 'Enemy 2' then
+        if enemy.name == 'Enemy 2' then         -- Basic enemy animation example
             local timer = love.timer.getTime()
             enemy.yOffset = (math.sin(timer*2) * 14) - 7
         end

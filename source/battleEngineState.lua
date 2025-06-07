@@ -28,6 +28,8 @@ function battleEngine.changeBattleState(state)
         ui.box.width = 135
     elseif state == 'fight' then
         battle.choice = -1
+    elseif state == 'perform act' then
+        encounter.doAct()
     end
 end
 
@@ -108,7 +110,7 @@ function battleEngine.draw()
     love.graphics.rectangle('fill', 0, 0, 640, 480)
 
     love.graphics.setColor(1, 1, 1, 0)
-    love.graphics.draw(refs.acts, 0, 0, 0, 0.5)
+    -- love.graphics.draw(refs.acts, 0, 0, 0, 0.5)
 
     love.graphics.pop()
 
