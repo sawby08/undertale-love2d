@@ -226,7 +226,7 @@ function player.update(dt)
                 if input.check('right', 'held') then
                     xvel = xvel + speed
                 end
-            elseif player.mode == 2 then -- Blue soul movement (doesn't adapt to other framerates correctly but I expect you to use this engine in the only good FPS to use in undertale fangames)
+            elseif player.mode == 2 then -- Blue soul movement
                 -- Left and right movement and gravitational pull
                 blueGrav = blueGrav + 0.75 * dt*30
                 yvel = yvel + blueGrav
