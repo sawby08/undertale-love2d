@@ -31,7 +31,7 @@ local kr = love.graphics.newImage('assets/images/ui/spr_krmeter_0.png')
 function ui.load()
     -- Set box dimensions
     ui.box = {
-        x = 35,
+        x = 320 - 570/2,
         y = 253,
         width = 570,
         height = 135,

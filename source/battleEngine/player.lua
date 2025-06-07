@@ -1,11 +1,9 @@
 local player = {}
 local battleEngine = require 'source.battleEngineState'
 local xvel, yvel = 0, 0
-local blueGrav = 0
-local jumpstage = 0
-local jumptimer = 0
+local blueGrav, jumpstage, jumptimer = 0, 0, 0
 
--- Load heart image and position
+-- Load heart image and position, global so other objects can place it
 player.heart = {
     image = love.graphics.newImage('assets/images/ut-heart.png'),
     x = 0,
@@ -28,40 +26,20 @@ local function updatePosition()
             player.heart.x = 55
             player.heart.y = 279 + (battle.subchoice * 32)
         elseif battle.state == 'act' then
-            if battle.subchoice == 0 then
-                player.heart.x = 64
-                player.heart.y = 278
-            elseif battle.subchoice == 1 then
-                player.heart.x = 320
-                player.heart.y = 278
-            elseif battle.subchoice == 2 then
-                player.heart.x = 64
-                player.heart.y = 310
-            elseif battle.subchoice == 3 then
-                player.heart.x = 320
-                player.heart.y = 310
-            elseif battle.subchoice == 4 then
-                player.heart.x = 64
-                player.heart.y = 342
-            elseif battle.subchoice == 5 then
-                player.heart.x = 320
-                player.heart.y = 342
-            end
+            local positions = {
+                x = {64, 320, 64, 320, 64, 320},
+                y = {278, 278, 310, 310, 342, 342}
+            }
+            player.heart.x = positions.x[battle.subchoice+1]
+            player.heart.y = positions.y[battle.subchoice+1]
         elseif battle.state == 'item' then
             local placement = battle.subchoice % 4
-            if placement == 0 then
-                player.heart.x = 64
-                player.heart.y = 278
-            elseif placement == 1 then
-                player.heart.x = 304
-                player.heart.y = 278
-            elseif placement == 2 then
-                player.heart.x = 64
-                player.heart.y = 310
-            elseif placement == 3 then
-                player.heart.x = 304
-                player.heart.y = 310
-            end
+            local positions = {
+                x = {64, 304, 64, 304},
+                y = {278, 278, 310, 310}
+            }
+            player.heart.x = positions.x[placement+1]
+            player.heart.y = positions.y[placement+1]
         end
     end
     if battle.turn == 'enemies' then
@@ -83,6 +61,40 @@ local function updatePosition()
         end
     end
 end
+
+local function performMove(type, number)
+    local last = battle.subchoice
+    if type == 'item' then
+        battle.subchoice = (battle.subchoice + number)
+        if battle.subchoice < 0 then
+            battle.subchoice = 0
+        end
+        if battle.subchoice > #player.inventory-1 then
+            battle.subchoice = #player.inventory-1
+        end
+    elseif type == 'act' then
+        battle.subchoice = (battle.subchoice + number)
+        if battle.subchoice < 0 then
+            battle.subchoice = 0
+        end
+        if battle.subchoice > #encounter.enemies[player.chosenEnemy].acts then
+            battle.subchoice = #encounter.enemies[player.chosenEnemy].acts
+        end
+    elseif type == 'choose enemy' then
+        battle.subchoice = (battle.subchoice + number)
+        if battle.subchoice < 0 then
+            battle.subchoice = 0
+        end
+        if battle.subchoice > #encounter.enemies-1 then
+            battle.subchoice = #encounter.enemies-1
+        end
+    end
+    if last ~= battle.subchoice then
+       sfx.menumove:stop()
+       sfx.menumove:play()
+    end
+end
+        
 
 function player.load()
     player.mode = 1
@@ -114,60 +126,16 @@ function player.update(dt)
         elseif battle.state == 'item' then
             -- Note: #player.inventory is subtracted by one because battle.subchoice iterates from 0. This doesn't present a problem for act since check isn't included but since all items are included I have to do it like this
             if input.check('up', 'pressed') then
-                local last = battle.subchoice
-                battle.subchoice = (battle.subchoice - 2)
-                if battle.subchoice < 0 then
-                    battle.subchoice = 0
-                end
-                if battle.subchoice > #player.inventory-1 then
-                    battle.subchoice = #player.inventory-1
-                end
-                if last ~= battle.subchoice then
-                    sfx.menumove:stop()
-                    sfx.menumove:play()
-                end
+                performMove('item', -2)
             end
             if input.check('down', 'pressed') then
-                local last = battle.subchoice
-                battle.subchoice = (battle.subchoice + 2)
-                if battle.subchoice < 0 then
-                    battle.subchoice = 0
-                end
-                if battle.subchoice > #player.inventory-1 then
-                    battle.subchoice = #player.inventory-1
-                end
-                if last ~= battle.subchoice then
-                    sfx.menumove:stop()
-                    sfx.menumove:play()
-                end
+                performMove('item', 2)
             end
             if input.check('left', 'pressed') then
-                local last = battle.subchoice
-                battle.subchoice = (battle.subchoice - 1)
-                if battle.subchoice < 0 then
-                    battle.subchoice = 0
-                end
-                if battle.subchoice > #player.inventory-1 then
-                    battle.subchoice = #player.inventory-1
-                end
-                if last ~= battle.subchoice then
-                    sfx.menumove:stop()
-                    sfx.menumove:play()
-                end
+                performMove('item', -1)
             end
             if input.check('right', 'pressed') then
-                local last = battle.subchoice
-                battle.subchoice = (battle.subchoice + 1)
-                if battle.subchoice < 0 then
-                    battle.subchoice = 0
-                end
-                if battle.subchoice > #player.inventory-1 then
-                    battle.subchoice = #player.inventory-1
-                end
-                if last ~= battle.subchoice then
-                    sfx.menumove:stop()
-                    sfx.menumove:play()
-                end
+                performMove('item', 1)
             end
             if input.check('secondary', 'pressed') then
                 input.refresh()
@@ -175,60 +143,16 @@ function player.update(dt)
             end
         elseif battle.state == 'act' then
             if input.check('up', 'pressed') then
-                local last = battle.subchoice
-                battle.subchoice = (battle.subchoice - 2)
-                if battle.subchoice < 0 then
-                    battle.subchoice = 0
-                end
-                if battle.subchoice > #encounter.enemies[player.chosenEnemy].acts then
-                    battle.subchoice = #encounter.enemies[player.chosenEnemy].acts
-                end
-                if last ~= battle.subchoice then
-                    sfx.menumove:stop()
-                    sfx.menumove:play()
-                end
+                performMove('act', -2)
             end
             if input.check('down', 'pressed') then
-                local last = battle.subchoice
-                battle.subchoice = (battle.subchoice + 2)
-                if battle.subchoice < 0 then
-                    battle.subchoice = 0
-                end
-                if battle.subchoice > #encounter.enemies[player.chosenEnemy].acts then
-                    battle.subchoice = #encounter.enemies[player.chosenEnemy].acts
-                end
-                if last ~= battle.subchoice then
-                    sfx.menumove:stop()
-                    sfx.menumove:play()
-                end
+                performMove('act', 2)
             end
             if input.check('left', 'pressed') then
-                local last = battle.subchoice
-                battle.subchoice = (battle.subchoice - 1)
-                if battle.subchoice < 0 then
-                    battle.subchoice = 0
-                end
-                if battle.subchoice > #encounter.enemies[player.chosenEnemy].acts then
-                    battle.subchoice = #encounter.enemies[player.chosenEnemy].acts
-                end
-                if last ~= battle.subchoice then
-                    sfx.menumove:stop()
-                    sfx.menumove:play()
-                end
+                performMove('act', -1)
             end
             if input.check('right', 'pressed') then
-                local last = battle.subchoice
-                battle.subchoice = (battle.subchoice + 1)
-                if battle.subchoice < 0 then
-                    battle.subchoice = 0
-                end
-                if battle.subchoice > #encounter.enemies[player.chosenEnemy].acts then
-                    battle.subchoice = #encounter.enemies[player.chosenEnemy].acts
-                end
-                if last ~= battle.subchoice then
-                    sfx.menumove:stop()
-                    sfx.menumove:play()
-                end
+                performMove('act', 1)
             end
             if input.check('secondary', 'pressed') then
                 input.refresh()
@@ -242,7 +166,6 @@ function player.update(dt)
             end
             if input.check('primary', 'pressed') then
                 if battle.choice == 0 then
-                    -- Debug stuff so I know the player can go back to the menu after an attack
                     player.lastButton = battle.choice
                     battle.choice = -1
                     battleEngine.changeBattleState('attack')
@@ -255,32 +178,10 @@ function player.update(dt)
                 sfx.menuselect:play()
             end
             if input.check('up', 'pressed') then
-                local last = battle.subchoice
-                battle.subchoice = (battle.subchoice - 1)
-                if battle.subchoice < 0 then
-                    battle.subchoice = 0
-                end
-                if battle.subchoice > #encounter.enemies-1 then
-                    battle.subchoice = #encounter.enemies-1
-                end
-                if last ~= battle.subchoice then
-                    sfx.menumove:stop()
-                    sfx.menumove:play()
-                end
+                performMove('choose enemy', -1)
             end
             if input.check('down', 'pressed') then
-                local last = battle.subchoice
-                battle.subchoice = (battle.subchoice + 1)
-                if battle.subchoice < 0 then
-                    battle.subchoice = 0
-                end
-                if battle.subchoice > #encounter.enemies-1 then
-                    battle.subchoice = #encounter.enemies-1
-                end
-                if last ~= battle.subchoice then
-                    sfx.menumove:stop()
-                    sfx.menumove:play()
-                end
+                performMove('choose enemy', 1)
             end
         elseif battle.state == 'buttons' then
             if input.check('right', 'pressed') then
@@ -366,7 +267,6 @@ function player.update(dt)
     updatePosition()
 end
 
-
 function player.draw()
     love.graphics.push("all")
 
@@ -379,5 +279,6 @@ function player.draw()
 
     love.graphics.pop()
 end
+
 
 return player

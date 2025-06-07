@@ -11,7 +11,7 @@ function battleEngine.changeBattleState(state)
 
     if state == 'buttons' then
         battle.turn = 'player'
-        ui.box.x = 35
+        ui.box.x = 320 - 570/2
         ui.box.width = 570
         local encounterText
         if type(encounter.text) == 'string' then

@@ -19,11 +19,11 @@ function encounter.load()
     encounter.startFirst = false
     encounter.canFlee = true
 
-    encounter.bgm = love.audio.newSource(encounterPath .. 'sound/mus.ogg', 'stream')
+    encounter.bgm = love.audio.newSource(encounterPath .. 'sound/mus_strongermonsters.ogg', 'stream')
     encounter.bgm:setVolume(conf.bgmVolume)
     encounter.bgm:setLooping(true)
 
-    encounter.backgroundImage = love.graphics.newImage(encounterPath .. 'images/backgrounds/spr_battlebg_0.png')
+    encounter.backgroundImage = love.graphics.newImage(encounterPath .. 'images/backgrounds/spr_battlebg_1.png')
     encounter.backgroundColor = {0, 0, 0}
 
     -- Enemy configuration
@@ -99,6 +99,9 @@ end
 
 -- Draw enemy background
 function encounter.background()
+    love.graphics.setColor(encounter.backgroundColor)
+    love.graphics.rectangle('fill', 0, 0, 640, 480)
+    love.graphics.setColor(1, 1, 1)
     if encounter.backgroundImage then
         love.graphics.draw(encounter.backgroundImage)
     end
