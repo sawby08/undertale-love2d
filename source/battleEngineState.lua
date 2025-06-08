@@ -6,13 +6,12 @@ local refs = {
     items = love.graphics.newImage("refs/items.png"),
 }
 
-function battleEngine.changeBattleState(state)
-    battle.state = state
-
-    if state == 'buttons' then
-        battle.turn = 'player'
-        ui.box.x = 320 - 570/2
-        ui.box.width = 570
+function battleEngine.changeBattleState(state, turn)
+    if state == 'buttons' and turn == 'player' then
+        if battle.state == 'attack' and battle.turn == 'enemies' then
+            battle.choice = player.lastButton
+            battle.subchoice = 0
+        end
         local encounterText
         if type(encounter.text) == 'string' then
             encounterText = encounter.text
@@ -20,17 +19,16 @@ function battleEngine.changeBattleState(state)
             encounterText = encounter.text[love.math.random(1, #encounter.text)]
         end
         writer:setParams(encounterText, 52, 274, fonts.determination, 0.02, writer.voices.menuText)
-    elseif state == 'attack' then
-        battle.turn = 'enemies'
-        player.heart.x = ui.box.x + ui.box.width / 2 - 8
-        player.heart.y = ui.box.y + ui.box.height / 2 - 8
-        ui.box.x = 252
-        ui.box.width = 135
-    elseif state == 'fight' then
+    elseif state == 'attack' and turn == 'enemies' then
+        writer:stop()
+    elseif state == 'fight' and turn == 'player' then
         battle.choice = -1
-    elseif state == 'perform act' then
+    elseif state == 'perform act' and turn == 'player' then
         encounter.doAct()
     end
+
+    battle.turn = turn
+    battle.state = state
 end
 
 function battleEngine.load(encounterName)
@@ -83,13 +81,9 @@ function battleEngine.load(encounterName)
 
     -- Go to menu or enemy turn
     if encounter.startFirst then
-        battle.turn = 'enemies'
-        battleEngine.changeBattleState('attack')
-        battle.choice = -1
+        battleEngine.changeBattleState('attack', 'enemies')
     else
-        battle.turn = 'player'
-        battleEngine.changeBattleState('buttons')
-        battle.choice = 0
+        battleEngine.changeBattleState('buttons', 'player')
     end
 end
 

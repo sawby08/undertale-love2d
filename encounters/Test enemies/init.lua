@@ -8,12 +8,16 @@ local battleEngine = require("source.battleEngineState")
 -- This makes importing images/sounds and stuff easier
 local encounterPath = "encounters/Test enemies/" -- Rename "Test enemies" to the name of your encounter folder
 
--- Makes it easier for me
+-- Helper functions for acting so it's easier for me to program
 local function performAct(act)
     if type(act.execute) == "function" then
         act:execute()
     end
 end
+local function performActText(selection, text)
+    writer:setParams(encounter.enemies[player.chosenEnemy].acts[selection].text[text], 52, 274, fonts.determination, 0.02, writer.voices.menuText)
+end
+local actTextI = 1
 
 -- The main stuff that can be edited
 function encounter.load()
@@ -45,7 +49,7 @@ function encounter.load()
                 end,
                 text = {
                     "* You try to talk to it.",
-                    "* ...not much of a talker, I guess."
+                    "* ...not much of a talker, I[break]  guess."
                 }
             },
             {
@@ -87,8 +91,8 @@ function encounter.load()
                     self.enemy.canSpare = true
                 end,
                 text = {
-                    "* You flap your arms like they're wings.",
-                    "* Enemy 2 appreciates your effort     [break][clear][yellow]* Enemy 2 is sparing you.."
+                    "* You flap your arms like[break]  they're wings.",
+                    "* Enemy 2 appreciates your effort     [break][clear][yellow]* Enemy 2 is sparing you."
                 }
             }
         },
@@ -126,11 +130,10 @@ function encounter.doAct()
     local enemy = encounter.enemies[player.chosenEnemy]
     if battle.subchoice > 0 then
         performAct(enemy.acts[battle.subchoice])
-        writer:setParams(enemy.acts[battle.subchoice].text[1], 52, 274, fonts.determination, 0.02, writer.voices.menuText)
+        performActText(battle.subchoice, actTextI)
     else
         writer:setParams("* " .. string.upper(enemy.name) .. " - ATT " .. enemy.attack .. " DEF " .. enemy.defense .. "[break]" .. enemy.description, 52, 274, fonts.determination, 0.02, writer.voices.menuText)
     end
-    battle.subchoice = 0
 end
 
 function encounter.update(dt)
@@ -138,6 +141,29 @@ function encounter.update(dt)
         if enemy.name == 'Enemy 2' then         -- Basic enemy animation example
             local timer = love.timer.getTime()
             enemy.yOffset = (math.sin(timer*2) * 14) - 7
+        end
+    end
+
+    if battle.state == 'perform act' then       -- Enable text scrolling in acting
+        if writer.isDone and input.check('primary', 'pressed') then
+            if battle.subchoice > 0 then
+                if actTextI < #encounter.enemies[player.chosenEnemy].acts[battle.subchoice].text then
+                    actTextI = actTextI + 1
+                    performActText(battle.subchoice, actTextI)
+                else
+                    battleEngine.changeBattleState('attack', 'enemies')
+                end
+            else
+                battleEngine.changeBattleState('attack', 'enemies')
+            end
+        end
+    end
+
+    if battle.state == 'attack' and battle.turn == 'enemies' then
+        if input.check('secondary', 'pressed') then     -- Just here so I know that the player can go back to the menu
+            input.refresh() -- So text doesn't skip
+            actTextI = 1 -- Reset act text interval
+            battleEngine.changeBattleState('buttons', 'player')
         end
     end
 end
@@ -154,6 +180,7 @@ end
 function encounter.background()
     love.graphics.setColor(encounter.backgroundColor)
     love.graphics.rectangle('fill', 0, 0, 640, 480)
+
     love.graphics.setColor(1, 1, 1)
     if encounter.backgroundImage then
         love.graphics.draw(encounter.backgroundImage)

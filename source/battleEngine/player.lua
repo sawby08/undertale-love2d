@@ -105,7 +105,7 @@ function player.update(dt)
         if battle.state == 'mercy' then
             if input.check('secondary', 'pressed') then
                 input.refresh()
-                battleEngine.changeBattleState('buttons')
+                battleEngine.changeBattleState('buttons', 'player')
             end
             if input.check('down', 'pressed') and encounter.canFlee then
                 if encounter.canFlee and battle.subchoice == 0 then
@@ -139,7 +139,7 @@ function player.update(dt)
             end
             if input.check('secondary', 'pressed') then
                 input.refresh()
-                battleEngine.changeBattleState('buttons')
+                battleEngine.changeBattleState('buttons', 'player')
             end
         elseif battle.state == 'act' then
             if input.check('up', 'pressed') then
@@ -157,24 +157,24 @@ function player.update(dt)
             if input.check('secondary', 'pressed') then
                 input.refresh()
                 battle.subchoice = player.chosenEnemy - 1
-                battleEngine.changeBattleState('choose enemy')
+                battleEngine.changeBattleState('choose enemy', 'player')
             end
             if input.check('primary', 'pressed') then
-                battleEngine.changeBattleState('perform act')
+                battleEngine.changeBattleState('perform act', 'player')
             end
         elseif battle.state == 'choose enemy' then
             if input.check('secondary', 'pressed') then
                 input.refresh()
-                battleEngine.changeBattleState('buttons')
+                battleEngine.changeBattleState('buttons', 'player')
             end
             if input.check('primary', 'pressed') then
                 if battle.choice == 0 then
                     player.lastButton = battle.choice
                     battle.choice = -1
-                    battleEngine.changeBattleState('attack')
+                    battleEngine.changeBattleState('attack', 'enemies')
                 elseif battle.choice == 1 then
                     player.chosenEnemy = battle.subchoice + 1
-                    battleEngine.changeBattleState('act')
+                    battleEngine.changeBattleState('act', 'player')
                     battle.subchoice = 0
                 end
                 sfx.menuselect:stop()
@@ -201,7 +201,7 @@ function player.update(dt)
                 if ui.buttons[battle.choice].canSelect then
                     writer.stop()
                     battle.subchoice = 0
-                    battleEngine.changeBattleState(ui.buttons[battle.choice].goTo)
+                    battleEngine.changeBattleState(ui.buttons[battle.choice].goTo, 'player')
                     sfx.menuselect:stop()
                     sfx.menuselect:play()
                 end
