@@ -44,7 +44,7 @@ function encounter.load()
         acts = {
             {
                 name = 'Talk',
-                execute = function()
+                execute = function(self)
                     -- nothing
                 end,
                 text = {
@@ -83,7 +83,6 @@ function encounter.load()
     encounter.enemies[2] = Enemy:new({
         name = "Enemy 2",
         description = "[clear]* The other half of the test[break]  site.",
-        acts = {'Flap'},
         acts = {
             {
                 name = 'Flap',
@@ -96,8 +95,10 @@ function encounter.load()
                 }
             }
         },
+
         canSpare = false,
         showHPBar = true,
+        canDodge = false,
 
         hp = 50,
         maxHp = 50,
