@@ -66,11 +66,11 @@ function battleEngine.load(encounterName)
     for _, sound in pairs(writer.voices) do
         sound:setVolume(conf.textVolume)
     end
-    encounter = require('encounters/' .. encounterName)
+    encounter = require 'source.utils.battleEngine.encounterHandler'
     itemManager = require 'source.utils.battleEngine.itemManager'
 
     -- Load objects
-    encounter.load()
+    encounter.loadEncounter(require("encounters/" .. encounterName))
 
     ui.load()
     ui.newButton('fight', 27, 432, 0, 'choose enemy') -- make buttons
