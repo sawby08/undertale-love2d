@@ -122,14 +122,14 @@ function ui.draw()
             if enemy.canSpare then
                 love.graphics.setColor(1, 1, 0)
             end
-            love.graphics.print('  * ' .. enemy.name, 52, 242 + (i * 32))
+            love.graphics.print('  * ' .. enemy.name, 68, 242 + (i * 32))
 
             if enemy.showHPBar then
                 love.graphics.setColor(1/3, 1/3, 1/3)
-                love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), 125, 20)
+                love.graphics.rectangle('fill', 110 + #string*16, 248 + (i * 32), 101, 17)
 
-                love.graphics.setColor(0, 0.75, 0)
-                love.graphics.rectangle('fill', 100 + #string*16, 245 + (i * 32), ((enemy.hp / enemy.maxHp) * 125), 20)
+                love.graphics.setColor(0, 1, 0)
+                love.graphics.rectangle('fill', 110 + #string*16, 248 + (i * 32), ((enemy.hp / enemy.maxHp) * 101), 17)
             end
             i = i + 1
         end

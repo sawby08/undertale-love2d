@@ -4,6 +4,7 @@ local refs = {
     main = love.graphics.newImage("refs/main.png"),
     acts = love.graphics.newImage("refs/acts.png"),
     items = love.graphics.newImage("refs/items.png"),
+    choose = love.graphics.newImage("refs/choose.png")
 }
 
 function battleEngine.changeBattleState(state, turn)
@@ -49,7 +50,7 @@ function battleEngine.load(encounterName)
     fonts = {
         mars = love.graphics.newFont('assets/fonts/Mars_Needs_Cunnilingus.ttf', 23),
         determination = love.graphics.newFont('assets/fonts/determination-mono.ttf', 32),
-        default = love.graphics.newFont(14)
+        dotumche = love.graphics.newFont("assets/fonts/undertale-dotumche.ttf", 12),
     }
 
     -- Set all sounds to player configuration
@@ -97,17 +98,6 @@ function battleEngine.update(dt)
 end
 
 function battleEngine.draw()
-    -- Saves the graphics state so drawing the ref and black base doesn't mess up the other stuff
-    love.graphics.push("all")
-
-    love.graphics.setColor(encounter.backgroundColor)
-    love.graphics.rectangle('fill', 0, 0, 640, 480)
-
-    love.graphics.setColor(1, 1, 1, 0)
-    -- love.graphics.draw(refs.acts, 0, 0, 0, 0.5)
-
-    love.graphics.pop()
-
     encounter.background()
 
     ui.draw()
@@ -115,6 +105,14 @@ function battleEngine.draw()
 
     encounter.draw() -- basically draws the enemies and the background
     player.draw()
+
+    -- Saves the graphics state so drawing the ref and black base doesn't mess up the other stuff
+    love.graphics.push("all")
+
+    love.graphics.setColor(1, 1, 1, 0)
+    love.graphics.draw(refs.choose, 0, 0)
+
+    love.graphics.pop()
 end
 
 return battleEngine

@@ -115,7 +115,7 @@ function encounter.load()
 
     -- Player specific encounter stats
     player.stats.love = 8
-    player.stats.name = 'A guy'
+    player.stats.name = ': - ]'
     player.inventory = {11, 1, 1, 23, 17, 19, 19, 10}
     player.hasKR = false
 

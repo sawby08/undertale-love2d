@@ -23,8 +23,8 @@ local function updatePosition()
             player.heart.x = ui.buttons[battle.choice].x + 8
             player.heart.y = ui.buttons[battle.choice].y + 13
         elseif battle.state == 'choose enemy' or battle.state == 'mercy' then
-            player.heart.x = 55
-            player.heart.y = 279 + (battle.subchoice * 32)
+            player.heart.x = 64
+            player.heart.y = 278 + (battle.subchoice * 32)
         elseif battle.state == 'act' then
             local positions = {
                 x = {64, 320, 64, 320, 64, 320},
