@@ -124,7 +124,7 @@ function ui.draw()
             end
             love.graphics.print('  * ' .. enemy.name, 68, 242 + (i * 32))
 
-            if enemy.showHPBar then
+            if enemy.showHPBar and battle.choice == 0 then
                 love.graphics.setColor(1/3, 1/3, 1/3)
                 love.graphics.rectangle('fill', 110 + #string*16, 248 + (i * 32), 101, 17)
 
@@ -157,10 +157,10 @@ function ui.draw()
                 love.graphics.setColor(1, 1, 0)
             end
         end
-        love.graphics.print('  * Spare', 52, 274)
+        love.graphics.print('  * Spare', 68, 274)
         if encounter.canFlee then
             love.graphics.setColor(1, 1, 1)
-            love.graphics.print('  * Flee', 52, 306)
+            love.graphics.print('  * Flee', 68, 306)
         end
     end
 end
