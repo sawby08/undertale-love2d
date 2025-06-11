@@ -13,11 +13,12 @@ function love.conf(t)
         fps = 30, -- I don't recommend changing this until I find out how to make the blue soul properly adapt to framerates other than 30
         fullscreen = false,
         gameScale = 1,
+        spareColor = {1, 187 / 255, 212 / 255}, -- {1, 1, 0} is yellow and {1, 187 / 255, 212 / 255} is pink
         
         bgmVolume = 0.5,
         sfxVolume = 1,
         textVolume = 1,
-        mainVolume = .5
+        mainVolume = 0.5
     }
 
     t.window.width = 640 * conf.gameScale
@@ -25,6 +26,7 @@ function love.conf(t)
     t.window.vsync = true
     t.window.fullscreentype = "desktop"
     t.window.resizable = false
+    t.window.fullscreen = conf.fullscreen
 
     t.window.title = "UNDERTALE"
     t.window.icon = "icon.png"

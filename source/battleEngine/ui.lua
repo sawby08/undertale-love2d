@@ -78,24 +78,43 @@ function ui.draw()
     end
 
     -- Draw HP bar
+    if player.stats.hp > player.stats.maxHp then    -- Cap the healthbar without any visual feedback
+        player.stats.hp = player.stats.maxHp
+    end
     love.graphics.setColor(.8, 0, 0)
     love.graphics.rectangle('fill', 275, 400, player.stats.maxHp * 1.25, 21)
     love.graphics.setColor(1, 1, 0)
     love.graphics.rectangle('fill', 275, 400, player.stats.hp * 1.25, 21)
 
     -- Draw HP numbers
-    if player.hasKR then
-        if player.kr == 0 then
-            love.graphics.setColor(1, 1, 1)
+    if player.stats.hp < 10 then
+        if player.hasKR then
+            if player.kr == 0 then
+                love.graphics.setColor(1, 1, 1)
+            else
+                -- Purple color (I haven't gotten to that part yet)
+            end
+            love.graphics.setFont(fonts.mars)
+            love.graphics.print('0' .. player.stats.hp .. ' / ' .. player.stats.maxHp, 320 + player.stats.maxHp*1.25, 400)
         else
-            -- Purple color (I haven't gotten to that part yet)
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.setFont(fonts.mars)
+            love.graphics.print('0' .. player.stats.hp .. ' / ' .. player.stats.maxHp, 289 + player.stats.maxHp*1.25, 400)
         end
-        love.graphics.setFont(fonts.mars)
-        love.graphics.print(player.stats.hp .. ' / ' .. player.stats.maxHp, 320 + player.stats.maxHp*1.25, 400)
     else
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.setFont(fonts.mars)
-        love.graphics.print(player.stats.hp .. ' / ' .. player.stats.maxHp, 289 + player.stats.maxHp*1.25, 400)
+        if player.hasKR then
+            if player.kr == 0 then
+                love.graphics.setColor(1, 1, 1)
+            else
+                -- Purple color (I haven't gotten to that part yet)
+            end
+            love.graphics.setFont(fonts.mars)
+            love.graphics.print(player.stats.hp .. ' / ' .. player.stats.maxHp, 320 + player.stats.maxHp*1.25, 400)
+        else
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.setFont(fonts.mars)
+            love.graphics.print(player.stats.hp .. ' / ' .. player.stats.maxHp, 289 + player.stats.maxHp*1.25, 400)
+        end
     end
 
     -- Draw box
@@ -121,7 +140,7 @@ function ui.draw()
             local string = '  * ' .. enemy.name
             love.graphics.setColor(1, 1, 1)
             if enemy.canSpare then
-                love.graphics.setColor(1, 1, 0)
+                love.graphics.setColor(conf.spareColor)
             end
             love.graphics.print('  * ' .. enemy.name, 68, 242 + (i * 32))
 
@@ -146,7 +165,7 @@ function ui.draw()
         local positions = { {x = 68,  y = 274}, {x = 308, y = 274}, {x = 68,  y = 306}, {x = 308, y = 306} }
         for i = 1, 4 do
             if player.inventory[i + (itemPage * 4)] then
-                love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[i + (itemPage * 4)], 'seriousName'), positions[i].x, positions[i].y)
+                love.graphics.print('  * ' .. itemManager.getPropertyFromID(player.inventory[i + (itemPage * 4)], 'shortName'), positions[i].x, positions[i].y)
             end
         end
         if #player.inventory > 4 then
@@ -156,7 +175,7 @@ function ui.draw()
         love.graphics.setColor(1, 1, 1)
         for _, enemy in ipairs(encounter.enemies) do
             if enemy.canSpare then
-                love.graphics.setColor(1, 1, 0)
+                love.graphics.setColor(conf.spareColor)
             end
         end
         love.graphics.print('  * Spare', 68, 274)

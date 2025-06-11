@@ -41,8 +41,18 @@ function encounterHandler.loadEncounter(encounterData)
     player.hasKR = encounterHandler.playerHasKR or false
 
     player.stats.maxHp = 16 + (player.stats.love * 4)
-    player.stats.hp = player.stats.maxHp
+    player.stats.hp = 1
     player.kr = 0
+
+    player.weapon = 3
+    player.armor = 4
+
+    player.stats.attack = itemManager.getPropertyFromID(player.weapon, 'stat')
+    if player.armor == 4 then -- Set defense to 0 if armor is Bandage
+        player.stats.defense = 0
+    else
+        player.stats.defense = itemManager.getPropertyFromID(player.armor, 'stat')
+    end
 end
 
 function encounterHandler.doAct()

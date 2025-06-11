@@ -77,4 +77,27 @@ function itemManager.getPropertyFromID(id, property)
     end
 end
 
+function itemManager.useItem(slot)
+    if itemManager.getPropertyFromID(player.inventory[slot], 'type') == 'consumable' then
+        if itemManager.getPropertyFromID(player.inventory[slot], 'stat') == 'all HP' then
+            player.stats.hp = player.stats.maxHp
+        else
+            player.stats.hp = player.stats.hp + itemManager.getPropertyFromID(player.inventory[slot], 'stat')
+        end
+        if player.inventory[slot] == 19 then
+            player.inventory[slot] = 20
+        else
+            table.remove(player.inventory, slot)
+        end
+    elseif itemManager.getPropertyFromID(player.inventory[slot], 'type') == 'armor' then
+        local last = player.armor
+        player.armor = player.inventory[slot]
+        player.inventory[slot] = last
+    elseif itemManager.getPropertyFromID(player.inventory[slot], 'type') == 'weapon' then
+        local last = player.weapon
+        player.weapon = player.inventory[slot]
+        player.inventory[slot] = last
+    end
+end
+
 return itemManager

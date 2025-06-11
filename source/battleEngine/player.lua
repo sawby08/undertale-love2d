@@ -16,7 +16,7 @@ player.stats = {}
 -- This only exists because I don't know a better way to make the heart not delayed between menu states
 local function updatePosition()
     if battle.turn == 'player' then
-        if battle.state == 'fight' or battle.state == 'perform act' then
+        if battle.state == 'fight' or battle.state == 'perform act' or battle.state == 'use item' then
             player.heart.x = -16
             player.heart.y = -16
         elseif battle.state == 'buttons' then
@@ -123,6 +123,8 @@ function player.update(dt)
                 battle.subchoice = 0
                 updatePosition()
             end
+        elseif battle.state == 'use item' and writer.isDone and input.check('primary', 'pressed') then
+                battleEngine.changeBattleState('attack', 'enemies')
         elseif battle.state == 'item' then
             -- Note: #player.inventory is subtracted by one because battle.subchoice iterates from 0. This doesn't present a problem for act since check isn't included but since all items are included I have to do it like this
             if input.check('up', 'pressed') then
@@ -136,6 +138,9 @@ function player.update(dt)
             end
             if input.check('right', 'pressed') then
                 performMove('item', 1)
+            end
+            if input.check('primary', 'pressed') then
+                battleEngine.changeBattleState('use item', 'player')
             end
             if input.check('secondary', 'pressed') then
                 input.refresh()

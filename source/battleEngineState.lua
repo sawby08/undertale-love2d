@@ -23,6 +23,23 @@ function battleEngine.changeBattleState(state, turn)
             writer:setParams(encounterText, 52, 274, fonts.determination, 0.02, writer.voices.menuText)
         elseif state == 'fight' then
             battle.choice = -1
+        elseif state == 'use item' then
+            player.lastButton = battle.choice
+            battle.choice = -1
+            local selectedItem = player.inventory[battle.subchoice+1]
+            itemManager.useItem(battle.subchoice+1)
+            local verb
+            if itemManager.getPropertyFromID(selectedItem, 'type') == 'consumable' then
+                verb = 'ate'
+                if player.stats.hp >= player.stats.maxHp then
+                    writer:setParams("* You " .. verb .. " the " .. itemManager.getPropertyFromID(selectedItem, 'name') .. '.     [break]* Your HP maxed out!', 52, 274, fonts.determination, 0.02, writer.voices.menuText)
+                else
+                    writer:setParams("* You " .. verb .. " the " .. itemManager.getPropertyFromID(selectedItem, 'name') .. '.     [break]* You recovered ' .. itemManager.getPropertyFromID(selectedItem, 'stat') .. ' HP.', 52, 274, fonts.determination, 0.02, writer.voices.menuText)
+                end
+            else
+                verb = 'equipped'
+                writer:setParams("* You " .. verb .. " the " .. itemManager.getPropertyFromID(selectedItem, 'name') .. '.', 52, 274, fonts.determination, 0.02, writer.voices.menuText)
+            end
         elseif state == 'perform act' then
             encounter.doAct()
         end
