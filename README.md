@@ -4,11 +4,11 @@
 
 <p>This engine is still unfinished. Here's a progress checklist:</p>
 
-- [ ] Buttons
-- [ ] Acting
-- [ ] Items
-- [ ] Red soul movement
-- [ ] Blue soul movement (UNFINISHED: Doesn't adapt properly to other framerates)
-- [x] Fight (Goes immediately to player controller)
-- [x] Mercy (You can't do anything right now)
-- [x] Attack system (Both player and enemies)
+- [x] Buttons
+- [x] Acting
+- [x] Items
+- [x] Red soul movement
+- [x] Blue soul movement (UNFINISHED: Doesn't adapt properly to other framerates)
+- [ ] Fight (Goes immediately to player controller)
+- [ ] Mercy (You can't do anything right now)
+- [ ] Attack system (Both player and enemies)
