@@ -8,24 +8,30 @@ local refs = {
 }
 
 function battleEngine.changeBattleState(state, turn)
-    if state == 'buttons' and turn == 'player' then
-        if battle.state == 'attack' and battle.turn == 'enemies' then
-            battle.choice = player.lastButton
-            battle.subchoice = 0
+    if turn == 'player' then
+        if state == 'buttons' then
+            if battle.state == 'attack' and battle.turn == 'enemies' then
+                battle.choice = player.lastButton
+                battle.subchoice = 0
+            end
+            local encounterText
+            if type(encounter.text) == 'string' then
+                encounterText = encounter.text
+            else
+                encounterText = encounter.text[love.math.random(1, #encounter.text)]
+            end
+            writer:setParams(encounterText, 52, 274, fonts.determination, 0.02, writer.voices.menuText)
+        elseif state == 'fight' then
+            battle.choice = -1
+        elseif state == 'perform act' then
+            encounter.doAct()
         end
-        local encounterText
-        if type(encounter.text) == 'string' then
-            encounterText = encounter.text
-        else
-            encounterText = encounter.text[love.math.random(1, #encounter.text)]
+    elseif turn == 'enemies' then
+        if state == 'attack' then
+            writer:stop()
         end
-        writer:setParams(encounterText, 52, 274, fonts.determination, 0.02, writer.voices.menuText)
-    elseif state == 'attack' and turn == 'enemies' then
-        writer:stop()
-    elseif state == 'fight' and turn == 'player' then
-        battle.choice = -1
-    elseif state == 'perform act' and turn == 'player' then
-        encounter.doAct()
+    else
+        error('Turn type ' .. turn .. ' not valid, can only either be player or enemies')
     end
 
     battle.turn = turn

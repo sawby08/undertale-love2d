@@ -20,8 +20,8 @@ end
 function ui.newBoxParams(x, y, w, h)
     ui.box.x = x
     ui.box.y = y
-    ui.box.w = w
-    ui.box.h = h
+    ui.box.width = w
+    ui.box.height = h
 end
 
 -- Load "HP" and "KR" graphics
@@ -40,6 +40,7 @@ function ui.load()
 end
 
 function ui.update(dt)
+    -- Disable item menu if player doesn't have any items
     if #player.inventory < 1 then
         ui.buttons[2].canSelect = false
     end
@@ -73,7 +74,7 @@ function ui.draw()
         if player.kr > 0 then
             -- Purple color (I haven't gotten to that part yet)
         end
-        love.graphics.draw(kr, 395, 405)
+        love.graphics.draw(kr, 280 + player.stats.maxHp * 1.25, 405)
     end
 
     -- Draw HP bar
@@ -124,8 +125,9 @@ function ui.draw()
             end
             love.graphics.print('  * ' .. enemy.name, 68, 242 + (i * 32))
 
-            if enemy.showHPBar and battle.choice == 0 then
-                love.graphics.setColor(1/3, 1/3, 1/3)
+            -- Draw enemy HP bar
+            if enemy.showHPBar and battle.choice == 0 then -- Checks if enemy can show HP bar and if the player is on selection 0 (fight)
+                love.graphics.setColor(.8, 0, 0)
                 love.graphics.rectangle('fill', 110 + #string*16, 248 + (i * 32), 101, 17)
 
                 love.graphics.setColor(0, 1, 0)
