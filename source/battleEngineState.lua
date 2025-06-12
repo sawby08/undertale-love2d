@@ -30,6 +30,7 @@ function battleEngine.changeBattleState(state, turn)
             itemManager.useItem(battle.subchoice+1)
             local verb
             if itemManager.getPropertyFromID(selectedItem, 'type') == 'consumable' then
+                sfx.playerheal:play()
                 verb = 'ate'
                 if player.stats.hp >= player.stats.maxHp then
                     writer:setParams("* You " .. verb .. " the " .. itemManager.getPropertyFromID(selectedItem, 'name') .. '.     [break]* Your HP maxed out!', 52, 274, fonts.determination, 0.02, writer.voices.menuText)
@@ -37,6 +38,7 @@ function battleEngine.changeBattleState(state, turn)
                     writer:setParams("* You " .. verb .. " the " .. itemManager.getPropertyFromID(selectedItem, 'name') .. '.     [break]* You recovered ' .. itemManager.getPropertyFromID(selectedItem, 'stat') .. ' HP.', 52, 274, fonts.determination, 0.02, writer.voices.menuText)
                 end
             else
+                sfx.menuselect:play()
                 verb = 'equipped'
                 writer:setParams("* You " .. verb .. " the " .. itemManager.getPropertyFromID(selectedItem, 'name') .. '.', 52, 274, fonts.determination, 0.02, writer.voices.menuText)
             end
@@ -69,6 +71,7 @@ function battleEngine.load(encounterName)
     sfx = {
         menumove = love.audio.newSource('assets/sound/menuMove.ogg', 'static'),
         menuselect = love.audio.newSource('assets/sound/menuSelect.ogg', 'static'),
+        playerheal = love.audio.newSource('assets/sound/playerHeal.ogg', 'static')
     }
     fonts = {
         mars = love.graphics.newFont('assets/fonts/Mars_Needs_Cunnilingus.ttf', 23),
