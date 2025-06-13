@@ -10,7 +10,7 @@ function love.conf(t)
             secondary = {'x', 'lshift', 'rshift'},
             fullscreen = {'f4'}
         },
-        fps = 30, -- I don't recommend changing this until I find out how to make the blue soul properly adapt to framerates other than 30
+        fps = 30,
         fullscreen = false,
         gameScale = 1,
         spareColor = {1, 187 / 255, 212 / 255}, -- {1, 1, 0} is yellow and {1, 187 / 255, 212 / 255} is pink

@@ -14,7 +14,7 @@ player.heart = {
 player.stats = {}
 
 -- This only exists because I don't know a better way to make the heart not delayed between menu states
-local function updatePosition()
+local function updatePosition(dt)
     if battle.turn == 'player' then
         if battle.state == 'fight' or battle.state == 'perform act' or battle.state == 'use item' then
             player.heart.x = -16
@@ -44,8 +44,8 @@ local function updatePosition()
     end
     if battle.turn == 'enemies' then
         if battle.state == 'attack' then
-            player.heart.x = player.heart.x + xvel
-            player.heart.y = player.heart.y + yvel
+            player.heart.x = player.heart.x + (xvel * dt*30)
+            player.heart.y = player.heart.y + (yvel * dt*30)
         end
         if player.heart.x < ui.box.x + 2 then
             player.heart.x = ui.box.x + 2
@@ -97,7 +97,7 @@ end
         
 
 function player.load()
-    player.mode = 1
+    player.mode = 2
 end
 
 function player.update(dt)
@@ -217,9 +217,9 @@ function player.update(dt)
             xvel, yvel = 0, 0
             local speed = 4
             if input.check('secondary', 'held') then
-                speed = 2 * dt*30
+                speed = 2
             else
-                speed = 4 * dt*30
+                speed = 4
             end
             if player.mode == 1 then -- Red soul movement
                 if input.check('up', 'held') then
@@ -256,15 +256,15 @@ function player.update(dt)
                 end
                 if jumpstage == 1 and input.check('up', 'held') and player.heart.y <= ui.box.y + ui.box.height - 19 then
                     -- Make the player jump by 6 pixels and increase jumptimer to prevent the player from jumping too high
-                    blueGrav = -6 * dt*30
-                    jumptimer = jumptimer + dt
+                    blueGrav = -6
+                    jumptimer = jumptimer + dt*30
                 end
                 if player.heart.y <= ui.box.y + ui.box.height - 19 and jumpstage == 1 and not input.check('up', 'held') then
                     -- Change gravity so movement is tighter
                     blueGrav = -1.5
                     jumpstage = 2
                 end
-                if jumptimer > 0.4 then
+                if jumptimer > 10 then
                     -- Don't change gravity so the full motion is fluid
                     jumptimer = 0
                     jumpstage = 2
@@ -272,7 +272,7 @@ function player.update(dt)
             end
         end
     end
-    updatePosition()
+    updatePosition(dt)
 end
 
 function player.draw()
